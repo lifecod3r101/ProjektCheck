@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "830093086347",
+    "project_id": "checker-bit64",
+    "storage_bucket": "checker-bit64.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830093086347:android:c351ce6af6f7f6c4b94e8e",
+        "android_client_info": {
+          "package_name": "com.y4.projektcheck"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "830093086347-imn23b0pjvlpr2h3mphj16mnb5r6innu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.y4.projektcheck",
+            "certificate_hash": "ac89636186d1ce1ab750882a4f37ff6761c9f4b3"
+          }
+        },
+        {
+          "client_id": "830093086347-0fdj959ucm2u2v4o90dl1e143o51p8ch.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnSVngQhSl5pmsRdQKIg11YzO7xzf4i7Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830093086347-0fdj959ucm2u2v4o90dl1e143o51p8ch.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
