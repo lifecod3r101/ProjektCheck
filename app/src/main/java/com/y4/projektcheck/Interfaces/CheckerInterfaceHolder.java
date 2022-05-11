@@ -15,6 +15,16 @@ public interface CheckerInterfaceHolder {
         void firebaseSignUpAuth();
     }
 
+    interface GameSessionRequestOperations {
+        void showAvailablePlayers();
+
+        void requestSession();
+
+        void acceptRequest(String requestedSessionId);
+
+        void declineRequest(String requestedSessionId);
+    }
+
     interface CheckUserActions {
         void validateInput(String s);
 

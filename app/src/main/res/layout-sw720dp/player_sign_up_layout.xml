@@ -27,18 +27,18 @@
         app:layout_constraintGuide_percent="0.0" />
 
     <androidx.constraintlayout.widget.Guideline
-    android:id="@+id/bottom_guideline"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    app:layout_constraintGuide_percent="1.0" />
+        android:id="@+id/bottom_guideline"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="1.0" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:src="@drawable/checkers"
         app:layout_constraintBottom_toTopOf="@id/username_verify_text"
-        app:layout_constraintDimensionRatio="1:5"
+        app:layout_constraintDimensionRatio="1:3"
         app:layout_constraintEnd_toStartOf="@id/end_guideline"
         app:layout_constraintStart_toEndOf="@id/start_guideline"
         app:layout_constraintTop_toBottomOf="@id/top_guideline" />

@@ -4,11 +4,12 @@ public class Player {
     private String playerUserId, playerEmailAddress, playerUserName;
     private double playerCumScore;
     private int matchesPlayed, playerWins, playerLosses, playerDraws;
+    private Boolean available, inSession;
 
     public Player() {
     }
 
-    public Player(String playerUserId, String playerEmailAddress, String playerUserName, double playerCumScore, int matchesPlayed, int playerWins, int playerLosses, int playerDraws) {
+    public Player(String playerUserId, String playerEmailAddress, String playerUserName, double playerCumScore, int matchesPlayed, int playerWins, int playerLosses, int playerDraws, Boolean available, Boolean inSession) {
         this.playerUserId = playerUserId;
         this.playerEmailAddress = playerEmailAddress;
         this.playerUserName = playerUserName;
@@ -17,6 +18,24 @@ public class Player {
         this.playerWins = playerWins;
         this.playerLosses = playerLosses;
         this.playerDraws = playerDraws;
+        this.available = available;
+        this.inSession = inSession;
+    }
+
+    public Boolean getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(Boolean available) {
+        this.available = available;
+    }
+
+    public Boolean getInSession() {
+        return inSession;
+    }
+
+    public void setInSession(Boolean inSession) {
+        this.inSession = inSession;
     }
 
     public String getPlayerUserId() {

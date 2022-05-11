@@ -6,85 +6,97 @@
     android:background="@color/cardview_dark_background">
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/start_guideline"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.15" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/end_guideline"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.85" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/top_guideline"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.0" />
-
-    <androidx.constraintlayout.widget.Guideline
-    android:id="@+id/bottom_guideline"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    app:layout_constraintGuide_percent="1.0" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:src="@drawable/checkers"
-        app:layout_constraintBottom_toTopOf="@id/username_verify_text"
+        app:layout_constraintBottom_toTopOf="@id/mail_verify_text"
         app:layout_constraintDimensionRatio="1:5"
         app:layout_constraintEnd_toStartOf="@id/end_guideline"
         app:layout_constraintStart_toEndOf="@id/start_guideline"
         app:layout_constraintTop_toBottomOf="@id/top_guideline" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/username_verify_text"
+        android:id="@+id/mail_verify_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:text="Verify Your Email Address"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@id/username_sign_up_enter_wrap"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/email_sign_up_enter_wrap"
         app:layout_constraintEnd_toStartOf="@id/end_guideline"
         app:layout_constraintStart_toEndOf="@id/start_guideline"
         app:layout_constraintTop_toBottomOf="@id/top_guideline" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/username_sign_up_enter_wrap"
+        android:id="@+id/email_sign_up_enter_wrap"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="18dp"
-        android:hint="User Name"
         android:textColorHint="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@id/sign_up"
+        app:layout_constraintBottom_toTopOf="@id/mail_verify"
         app:layout_constraintEnd_toStartOf="@id/end_guideline"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@id/start_guideline"
         app:layout_constraintTop_toBottomOf="@id/top_guideline"
         app:layout_constraintVertical_chainStyle="packed">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/username_sign_up_enter"
+            android:id="@+id/email_sign_up_enter"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="Enter Your Email Address" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/sign_up"
+        android:id="@+id/mail_verify"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="#CC6666"
-        android:text="Start Playing"
+        android:hint="Verify Email Address"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
         app:layout_constraintEnd_toStartOf="@id/end_guideline"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@id/start_guideline"
-        app:layout_constraintTop_toBottomOf="@id/username_sign_up_enter_wrap" />
+        app:layout_constraintTop_toBottomOf="@id/email_sign_up_enter_wrap" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/load_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:indicatorColor="#CC6666"
+        app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
+        app:layout_constraintEnd_toStartOf="@id/end_guideline"
+        app:layout_constraintStart_toEndOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/mail_verify" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

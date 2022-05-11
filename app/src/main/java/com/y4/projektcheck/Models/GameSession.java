@@ -7,27 +7,35 @@ import java.util.Date;
 import java.util.Map;
 
 public class GameSession {
-    @ServerTimestamp
-    private Date gameStartTime;
-
-    private Date gameEndTime;
+    private Date gameStartTime, gameEndTime;
 
     @DocumentId
     private String gameSessionId;
 
     private Map<String, Object> gameSessionPlayers, gameSessionPlayerMoves, gameSessionPlayerScores;
 
+    private Boolean playerAccepted;
+
 
     public GameSession() {
     }
 
-    public GameSession(Date gameStartTime, Date gameEndTime, String gameSessionId, Map<String, Object> gameSessionPlayers, Map<String, Object> gameSessionPlayerScores, Map<String, Object> gameSessionPlayerMoves) {
+    public GameSession(Date gameStartTime, Date gameEndTime, String gameSessionId, Map<String, Object> gameSessionPlayers, Map<String, Object> gameSessionPlayerScores, Map<String, Object> gameSessionPlayerMoves, Boolean playerAccepted) {
         this.gameStartTime = gameStartTime;
         this.gameEndTime = gameEndTime;
         this.gameSessionId = gameSessionId;
         this.gameSessionPlayers = gameSessionPlayers;
         this.gameSessionPlayerScores = gameSessionPlayerScores;
         this.gameSessionPlayerMoves = gameSessionPlayerMoves;
+        this.playerAccepted = playerAccepted;
+    }
+
+    public Boolean getPlayerAccepted() {
+        return playerAccepted;
+    }
+
+    public void setPlayerAccepted(Boolean playerAccepted) {
+        this.playerAccepted = playerAccepted;
     }
 
     public Date getGameStartTime() {

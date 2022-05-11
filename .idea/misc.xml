@@ -3,8 +3,25 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/drawable/ic_bpiece.xml" value="0.1855" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/drawable/ic_checker_board_part.xml" value="0.124" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/drawable/ic_rpiece.xml" value="0.1855" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw320dp/game_session_layout.xml" value="0.136" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw320dp/player_sign_up_layout.xml" value="0.136" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw480dp/game_session_layout.xml" value="0.1" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw480dp/player_sign_up_layout.xml" value="0.18920765027322403" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw600dp/game_session_layout.xml" value="0.136" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw600dp/player_sign_up_layout.xml" value="0.1" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw720dp/game_session_layout.xml" value="0.1" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw720dp/player_sign_up_layout.xml" value="0.1" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/activity_main.xml" value="0.176" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/checker_piece_layout.xml" value="0.20863616930312098" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/game_session_layout.xml" value="0.176" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/guidelines_file_layout.xml" value="0.2509057971014493" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/player_email_sign_up_layout.xml" value="0.2509057971014493" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/player_sign_up_layout.xml" value="0.2" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/session_create_dialog_layout.xml" value="0.20863616930312098" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/test_layout.xml" value="0.152" />
       </map>
     </option>
   </component>
@@ -13,5 +30,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.264" />
+      </ProjectState>
+    </option>
   </component>
 </project>

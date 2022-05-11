@@ -11,31 +11,38 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.y4.projektcheck.Presenters.PlayerEmailSignUpPresenter;
+import com.y4.projektcheck.R;
 
 public class PlayerEmailSignUpActivity extends AppCompatActivity implements PlayerEmailSignUpPresenter.EmailSignUpView {
     private TextInputEditText emailEnter;
-    private ProgressBar loadProgress;
+    private CircularProgressIndicator loadProgress;
     private MaterialButton emailVerifyButton;
     private PlayerEmailSignUpPresenter playerEmailSignUpPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.player_email_sign_up_layout);
+        emailEnter = findViewById(R.id.email_sign_up_enter);
+        loadProgress = findViewById(R.id.load_progress);
+        emailVerifyButton = findViewById(R.id.mail_verify);
         playerEmailSignUpPresenter = new PlayerEmailSignUpPresenter(this);
-        playerEmailSignUpPresenter.readSavePlayerEmailAddress(emailEnter.getText().toString());
-        emailVerifyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playerEmailSignUpPresenter.emailAddressIsEmptyOrNotEmail(emailEnter.getText().toString().trim());
-            }
-        });
+        loadProgress.setVisibility(View.GONE);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        emailVerifyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadProgress.setVisibility(View.VISIBLE);
+                playerEmailSignUpPresenter.emailAddressIsEmptyOrNotEmail(emailEnter.getText().toString().trim());
+            }
+        });
     }
 
     @Override
@@ -83,10 +90,10 @@ public class PlayerEmailSignUpActivity extends AppCompatActivity implements Play
             editor.putString("emailAddress", emailAddressAuth);
             editor.apply();
             emailEnter.setText("");
-            loadProgress.setVisibility(ProgressBar.INVISIBLE);
+            loadProgress.setVisibility(View.GONE);
         } else {
             Toast.makeText(PlayerEmailSignUpActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
-            loadProgress.setVisibility(ProgressBar.INVISIBLE);
+            loadProgress.setVisibility(View.GONE);
         }
     }
 }

@@ -27,11 +27,11 @@
         app:layout_constraintGuide_percent="0.0" />
 
     <androidx.constraintlayout.widget.Guideline
-    android:id="@+id/bottom_guideline"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    app:layout_constraintGuide_percent="1.0" />
+        android:id="@+id/bottom_guideline"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="1.0" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:layout_width="0dp"

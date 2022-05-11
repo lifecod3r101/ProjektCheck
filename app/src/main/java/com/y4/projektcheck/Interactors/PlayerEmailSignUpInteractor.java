@@ -16,7 +16,6 @@ public class PlayerEmailSignUpInteractor implements CheckerInterfaceHolder.Recog
     private int minInt = 1000;
     private Random random = new Random();
     private int maxInt = random.nextInt(Integer.MAX_VALUE - minInt) + minInt;
-    private Constants constants = new Constants();
     private String emailAddressAuth;
 
     public void getEmailAddress(String playerEmailAddress) {
@@ -25,7 +24,7 @@ public class PlayerEmailSignUpInteractor implements CheckerInterfaceHolder.Recog
 
     @Override
     public void firebaseSignUpAuth() {
-        ActionCodeSettings actionCodeSettings = ActionCodeSettings.newBuilder().setUrl("".concat(String.valueOf(maxInt))).setAndroidPackageName("com.y4.projektcheck", true, null).setHandleCodeInApp(true).setDynamicLinkDomain("").build();
+        ActionCodeSettings actionCodeSettings = ActionCodeSettings.newBuilder().setUrl("https://projektcheck.page.link/verify?uid=".concat(String.valueOf(maxInt))).setAndroidPackageName("com.y4.projektcheck", true, null).setHandleCodeInApp(true).setDynamicLinkDomain("projektcheck.page.link").build();
         Constants.getFirebaseAuth().sendSignInLinkToEmail(emailAddressAuth, actionCodeSettings).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

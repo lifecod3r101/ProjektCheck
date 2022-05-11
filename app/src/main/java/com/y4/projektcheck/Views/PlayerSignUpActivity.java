@@ -25,6 +25,8 @@ public class PlayerSignUpActivity extends AppCompatActivity implements PlayerSig
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player_sign_up_layout);
+        userNameEditText = findViewById(R.id.username_sign_up_enter);
+        confirmInfoButton = findViewById(R.id.sign_up);
         playerSignUpPresenter = new PlayerSignUpPresenter(this);
         getEmail = getSharedPreferences("emailInfo", MODE_PRIVATE);
         emailGet = getEmail.getString("emailAddress", "");
@@ -76,7 +78,7 @@ public class PlayerSignUpActivity extends AppCompatActivity implements PlayerSig
     @Override
     public void userNameIsTaken(String playerUserName, Boolean isTaken) {
         if (isTaken) {
-            userNameEditText.setError("Sorry. This is required.");
+            userNameEditText.setError("Sorry. This username has been taken.");
             userNameEditText.requestFocus();
         } else {
             playerSignUpPresenter.readPlayerUserNameAndEmailAddress(playerUserName, emailGet);

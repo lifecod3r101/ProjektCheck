@@ -35,6 +35,8 @@ public class PlayerSignUpInteractor implements CheckerInterfaceHolder.GetUserInf
         player.setPlayerDraws(0);
         player.setPlayerLosses(0);
         player.setPlayerCumScore(0);
+        player.setAvailable(true);
+        player.setInSession(false);
         userName.setUserId(Constants.getFirebaseAuth().getCurrentUser().getUid());
         constants.getFirebaseFirestore().collection("UserName").document(playerUserName).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
