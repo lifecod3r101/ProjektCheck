@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/start_guideline"
@@ -35,25 +35,76 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/checker_board_piece"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
+        android:clickable="false"
+        android:focusable="false"
         android:src="@drawable/ic_checker_board_part"
         app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
         app:layout_constraintEnd_toStartOf="@id/end_guideline"
         app:layout_constraintStart_toEndOf="@id/start_guideline"
         app:layout_constraintTop_toBottomOf="@id/top_guideline" />
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/checker_board_man"
+    <ImageButton
+        android:id="@+id/checker_board_man_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@null"
+        android:clickable="false"
+        android:focusable="false"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_rpiece"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/checker_board_piece"
         app:layout_constraintEnd_toEndOf="@id/checker_board_piece"
         app:layout_constraintStart_toStartOf="@id/checker_board_piece"
         app:layout_constraintTop_toTopOf="@id/checker_board_piece" />
 
+    <ImageButton
+        android:id="@+id/checker_board_man_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:visibility="invisible"
+        android:src="@drawable/ic_bpiece"
+        android:clickable="false"
+        android:focusable="false"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="@id/checker_board_piece"
+        app:layout_constraintEnd_toEndOf="@id/checker_board_piece"
+        app:layout_constraintStart_toStartOf="@id/checker_board_piece"
+        app:layout_constraintTop_toTopOf="@id/checker_board_piece" />
 
+    <ImageButton
+        android:id="@+id/checker_board_king_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:clickable="false"
+        android:focusable="false"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_checker_king_2"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/checker_board_piece"
+        app:layout_constraintEnd_toEndOf="@id/checker_board_piece"
+        app:layout_constraintStart_toStartOf="@id/checker_board_piece"
+        app:layout_constraintTop_toTopOf="@id/checker_board_piece" />
+
+    <ImageButton
+        android:id="@+id/checker_board_king_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:visibility="invisible"
+        android:src="@drawable/ic_checker_king_1"
+        android:clickable="false"
+        android:focusable="false"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="@id/checker_board_piece"
+        app:layout_constraintEnd_toEndOf="@id/checker_board_piece"
+        app:layout_constraintStart_toStartOf="@id/checker_board_piece"
+        app:layout_constraintTop_toTopOf="@id/checker_board_piece" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

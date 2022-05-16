@@ -1,11 +1,19 @@
 package com.y4.projektcheck.Views;
 
+import android.media.Image;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.y4.projektcheck.Adapters.GameSessionAdapter;
 import com.y4.projektcheck.Misc.GameLogic;
@@ -30,25 +38,7 @@ public class GameSessionActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        gameSessionAdapter.setPieceSpaceClick(new GameSessionAdapter.OnItemClickListener() {
-            @Override
-            public void ClickPiece(int position, boolean currPlayerPieces, boolean oppPlayerPieces) {
-                gameSessionAdapter.setSpacesAvailable(true);
-                gameSessionAdapter.setSquaresAvailable(gameLogic.getSpacesAvailableWhileAtEdge(position));
-                boolean clickedPositionsSev = position == 56 || position == 40 || position == 24 || position == 8;
-                boolean clickedPositionsNine = position == 55 || position == 39 || position == 23;
-                if ((clickedPositionsSev || clickedPositionsNine) && currPlayerPieces) {
-                    Toast.makeText(GameSessionActivity.this, gameSessionAdapter.getSquaresAvailable().toString(), Toast.LENGTH_SHORT).show();
-                }
-                gameSessionAdapter.setPieceClicked(position);
-            }
-
-            @Override
-            public void ClickSpace(int position, boolean currPlayerPieces, boolean oppPlayerPieces) {
-
-            }
-        });
-        gridView.setAdapter(gameSessionAdapter);
+        gameSessionAdapter.setGridView(gridView);
     }
 
     @Override
