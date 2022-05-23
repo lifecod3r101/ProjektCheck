@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cardview_dark_background">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_guideline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="1.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_guideline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/end_guideline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <Toolbar
+        android:id="@+id/player_profile_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/player_id_card"
+        app:layout_constraintEnd_toStartOf="@id/end_guideline"
+        app:layout_constraintStart_toEndOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/top_guideline" />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/player_id_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/wdl_card"
+        app:layout_constraintEnd_toStartOf="@id/end_guideline"
+        app:layout_constraintStart_toEndOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/top_guideline">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/top_card_top_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.0" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/top_card_bottom_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="1.0" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/top_card_start_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.0" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/top_card_end_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="1.0" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/player_profile_img"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/ic_user"
+                app:layout_constraintBottom_toTopOf="@id/username_text"
+                app:layout_constraintDimensionRatio="5:1"
+                app:layout_constraintEnd_toStartOf="@id/top_card_end_guideline"
+                app:layout_constraintStart_toEndOf="@id/top_card_start_guideline"
+                app:layout_constraintTop_toBottomOf="@id/top_card_top_guideline" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/username_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="35sp"
+                app:layout_constraintBottom_toTopOf="@id/player_mail_text"
+                app:layout_constraintEnd_toStartOf="@id/top_card_end_guideline"
+                app:layout_constraintStart_toEndOf="@id/top_card_start_guideline"
+                app:layout_constraintTop_toBottomOf="@id/player_profile_img" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/player_mail_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@id/top_card_bottom_guideline"
+                app:layout_constraintEnd_toStartOf="@id/top_card_end_guideline"
+                app:layout_constraintStart_toEndOf="@id/top_card_start_guideline"
+                app:layout_constraintTop_toBottomOf="@id/username_text" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/wdl_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
+        app:layout_constraintEnd_toStartOf="@id/end_guideline"
+        app:layout_constraintStart_toEndOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/player_id_card">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/card_top_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.0" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/card_bottom_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="1.0" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/card_start_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.0" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/card_end_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="1.0" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/wins_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="30sp"
+                app:layout_constraintBottom_toTopOf="@id/draws_text"
+                app:layout_constraintEnd_toStartOf="@id/card_end_guideline"
+                app:layout_constraintStart_toEndOf="@id/card_start_guideline"
+                app:layout_constraintTop_toBottomOf="@id/card_top_guideline" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/draws_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@id/card_bottom_guideline"
+                app:layout_constraintEnd_toStartOf="@id/losses_text"
+                app:layout_constraintStart_toEndOf="@id/card_start_guideline"
+                app:layout_constraintTop_toBottomOf="@id/wins_text" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/losses_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@id/card_bottom_guideline"
+                app:layout_constraintEnd_toStartOf="@id/card_end_guideline"
+                app:layout_constraintStart_toEndOf="@id/draws_text"
+                app:layout_constraintTop_toBottomOf="@id/wins_text" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/total_score"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toTopOf="@id/card_bottom_guideline"
+                app:layout_constraintEnd_toStartOf="@id/card_end_guideline"
+                app:layout_constraintStart_toEndOf="@id/card_start_guideline"
+                app:layout_constraintTop_toBottomOf="@id/draws_text" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

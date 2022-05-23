@@ -14,28 +14,28 @@ public class GameSession {
 
     private Map<String, Object> gameSessionPlayers, gameSessionPlayerMoves, gameSessionPlayerScores;
 
-    private Boolean playerAccepted;
+    private Boolean playerFound;
 
 
     public GameSession() {
     }
 
-    public GameSession(Date gameStartTime, Date gameEndTime, String gameSessionId, Map<String, Object> gameSessionPlayers, Map<String, Object> gameSessionPlayerScores, Map<String, Object> gameSessionPlayerMoves, Boolean playerAccepted) {
+    public GameSession(Date gameStartTime, Date gameEndTime, String gameSessionId, Map<String, Object> gameSessionPlayers, Map<String, Object> gameSessionPlayerScores, Map<String, Object> gameSessionPlayerMoves, Boolean playerFound) {
         this.gameStartTime = gameStartTime;
         this.gameEndTime = gameEndTime;
         this.gameSessionId = gameSessionId;
         this.gameSessionPlayers = gameSessionPlayers;
         this.gameSessionPlayerScores = gameSessionPlayerScores;
         this.gameSessionPlayerMoves = gameSessionPlayerMoves;
-        this.playerAccepted = playerAccepted;
+        this.playerFound = playerFound;
     }
 
-    public Boolean getPlayerAccepted() {
-        return playerAccepted;
+    public Boolean getPlayerFound() {
+        return playerFound;
     }
 
-    public void setPlayerAccepted(Boolean playerAccepted) {
-        this.playerAccepted = playerAccepted;
+    public void setPlayerFound(Boolean playerFound) {
+        this.playerFound = playerFound;
     }
 
     public Date getGameStartTime() {

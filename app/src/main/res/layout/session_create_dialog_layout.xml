@@ -46,9 +46,10 @@
         app:layout_constraintTop_toBottomOf="@id/top_guideline" />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/black_tool"
+        android:id="@+id/yellow_tool"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@drawable/ic_checker_king_2"
         app:layout_constraintBottom_toTopOf="@id/game_create"
         app:layout_constraintEnd_toStartOf="@id/white_tool"
         app:layout_constraintStart_toEndOf="@id/start_guideline"
@@ -58,32 +59,11 @@
         android:id="@+id/white_tool"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/game_create"
-        app:layout_constraintEnd_toStartOf="@id/coke_bottle_top_tool"
-        app:layout_constraintStart_toEndOf="@id/black_tool"
-        app:layout_constraintTop_toBottomOf="@id/text_select_colour" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/coke_bottle_top_tool"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/game_create"
-        app:layout_constraintEnd_toStartOf="@id/fanta_bottle_top_tool"
-        app:layout_constraintStart_toEndOf="@id/white_tool"
-        app:layout_constraintTop_toBottomOf="@id/text_select_colour"
-
-        />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/fanta_bottle_top_tool"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:src="@drawable/ic_checker_king_1"
         app:layout_constraintBottom_toTopOf="@id/game_create"
         app:layout_constraintEnd_toStartOf="@id/end_guideline"
-        app:layout_constraintStart_toEndOf="@id/coke_bottle_top_tool"
-        app:layout_constraintTop_toBottomOf="@id/text_select_colour"
-
-        />
+        app:layout_constraintStart_toEndOf="@id/yellow_tool"
+        app:layout_constraintTop_toBottomOf="@id/text_select_colour" />
 
 
     <com.google.android.material.button.MaterialButton

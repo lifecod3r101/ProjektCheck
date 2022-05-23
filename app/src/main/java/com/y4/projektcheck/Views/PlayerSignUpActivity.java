@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +19,7 @@ public class PlayerSignUpActivity extends AppCompatActivity implements PlayerSig
     private TextInputEditText userNameEditText;
     private MaterialButton confirmInfoButton;
     private SharedPreferences getEmail;
-    private String emailGet;
+    private String emailGet, userNameGet, extraActionGet;
 
 
     @Override
@@ -27,14 +28,16 @@ public class PlayerSignUpActivity extends AppCompatActivity implements PlayerSig
         setContentView(R.layout.player_sign_up_layout);
         userNameEditText = findViewById(R.id.username_sign_up_enter);
         confirmInfoButton = findViewById(R.id.sign_up);
-        playerSignUpPresenter = new PlayerSignUpPresenter(this);
+        playerSignUpPresenter = new PlayerSignUpPresenter(PlayerSignUpActivity.this);
         getEmail = getSharedPreferences("emailInfo", MODE_PRIVATE);
         emailGet = getEmail.getString("emailAddress", "");
+        extraActionGet = getEmail.getString("extraAction", "");
+        playerSignUpPresenter.getFirebaseSignInLink(getIntent(), emailGet);
         confirmInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playerSignUpPresenter.userNameExists(userNameEditText.getText().toString());
-                playerSignUpPresenter.userNameIsEmpty(userNameEditText.getText().toString());
+                userNameGet = userNameEditText.getText().toString();
+                playerSignUpPresenter.checkIfUserNameEmpty(userNameGet);
             }
         });
     }
@@ -64,25 +67,50 @@ public class PlayerSignUpActivity extends AppCompatActivity implements PlayerSig
         super.onDestroy();
     }
 
+
     @Override
-    public void checkUserNameEmpty(String playerUserName, Boolean isEmpty) {
-        if (isEmpty) {
+    public void checkUserNameEmpty(String playerUserName) {
+        if (playerUserName.isEmpty()) {
             userNameEditText.setError("Sorry. This is required.");
             userNameEditText.requestFocus();
         } else {
-            playerSignUpPresenter.readPlayerUserNameAndEmailAddress(playerUserName, emailGet);
-            startActivity(new Intent(PlayerSignUpActivity.this, MainActivity.class));
+            playerSignUpPresenter.getPlayerUserName(playerUserName);
         }
     }
 
     @Override
-    public void userNameIsTaken(String playerUserName, Boolean isTaken) {
-        if (isTaken) {
+    public void checkUserNameTaken(boolean snapshotExists) {
+        if (snapshotExists) {
             userNameEditText.setError("Sorry. This username has been taken.");
             userNameEditText.requestFocus();
         } else {
-            playerSignUpPresenter.readPlayerUserNameAndEmailAddress(playerUserName, emailGet);
-            startActivity(new Intent(PlayerSignUpActivity.this, MainActivity.class));
+            if (extraActionGet.equals("ID")) {
+                startActivity(new Intent(PlayerSignUpActivity.this, UserProfileActivity.class));
+                finish();
+            } else if (extraActionGet.equals("sessionMine")) {
+                startActivity(new Intent(PlayerSignUpActivity.this, MainMenuActivity.class).putExtra("intention", extraActionGet));
+                finish();
+                Toast.makeText(PlayerSignUpActivity.this, "Please proceed to create your session!", Toast.LENGTH_SHORT).show();
+            } else if (extraActionGet.equals("sessionOther")) {
+                startActivity(new Intent(PlayerSignUpActivity.this, GameSessionRequestActivity.class));
+                finish();
+            } else {
+                startActivity(new Intent(PlayerSignUpActivity.this, MainMenuActivity.class));
+                finish();
+                Toast.makeText(PlayerSignUpActivity.this, "Welcome to the club!", Toast.LENGTH_SHORT).show();
+            }
+
         }
+    }
+
+    @Override
+    public void checkPlayerExists(boolean exists) {
+        if (exists) {
+            startActivity(new Intent(PlayerSignUpActivity.this, MainMenuActivity.class));
+            Toast.makeText(PlayerSignUpActivity.this, "Welcome back to the club!", Toast.LENGTH_SHORT).show();
+        } else {
+
+        }
+
     }
 }

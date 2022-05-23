@@ -1,22 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <supports-screens
-        android:largeScreens="false"
-        android:normalScreens="true"
-        android:smallScreens="true"
-        android:xlargeScreens="false" />
+
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/checkers"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/checkers"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjektCheck">
 
 
         <activity
-            android:name=".Views.MainActivity"
+            android:name="com.y4.projektcheck.Views.MainMenuActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
+            android:name="com.y4.projektcheck.Views.PlayerEmailSignUpActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
+            android:name="com.y4.projektcheck.Views.PlayerSignUpActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="projektcheck.page.link"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.y4.projektcheck.Views.GameSessionActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.y4.projektcheck.Views.GameSessionRequestActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
+            android:name="com.y4.projektcheck.Views.SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,11 +52,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Views.PlayerEmailSignUpActivity" />
-        <activity android:name=".Views.PlayerSignUpActivity" />
-        <activity
-            android:name=".Views.GameSessionActivity"
-            android:exported="true" />
+        <activity android:name="com.y4.projektcheck.Views.UserProfileActivity" />
     </application>
 
 </manifest>

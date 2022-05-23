@@ -1,40 +1,43 @@
 package com.y4.projektcheck.Interfaces;
 
-import android.content.Context;
+import android.content.Intent;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.auth.FirebaseUser;
 import com.y4.projektcheck.Models.Player;
 
 public interface CheckerInterfaceHolder {
     interface GetUserInfoViewOperations {
-        void signUpLoginUser();
+        void readExistingUserInformation(String userId);
+
+        void writeUserInformation(String emailAddress);
+
+        void signUpLoginUser(String playerUserName);
     }
 
     interface RecogniseUser {
-        void firebaseSignUpAuth();
+        void getFirebaseSignInLink(Intent intent, String emailGet);
+    }
+
+    interface MainMenuOperations {
+        void getUserInformation(FirebaseUser firebaseUser);
+
+        void createSession(String hostPlayerId);
+
     }
 
     interface GameSessionRequestOperations {
-        void showAvailablePlayers();
+        void showAvailableSessions();
 
-        void requestSession();
+        void requestToPlaySession(String hostPlayerId);
 
-        void acceptRequest(String requestedSessionId);
+        void acceptRequest(String requestedSessionId, String hostPlayerId, String joiningPlayerId);
 
-        void declineRequest(String requestedSessionId);
+        void removeSession(String hostPlayerId, String requestedSessionId);
     }
 
-    interface CheckUserActions {
-        void validateInput(String s);
 
-        void validateInput(String s, boolean isEmpty);
-
-        void validateInput(String s, boolean isEmpty, boolean isNotEmail);
-    }
-
-    interface ShowUserInfoViewOperations {
-        void showLoggedInUser();
+    interface PlayerProfileOperations {
+        void showLoggedInUser(FirebaseUser firebaseUser);
     }
 
     interface GameSessionOperations {

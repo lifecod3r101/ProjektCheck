@@ -70,6 +70,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email_sign_up_enter"
+            android:inputType="textEmailAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter Your Email Address" />

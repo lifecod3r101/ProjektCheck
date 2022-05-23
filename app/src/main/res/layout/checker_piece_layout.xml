@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/start_guideline"
@@ -35,9 +35,9 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/checker_board_piece"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:adjustViewBounds="false"
         android:clickable="false"
         android:focusable="false"
         android:src="@drawable/ic_checker_board_part"
@@ -66,11 +66,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:visibility="invisible"
-        android:src="@drawable/ic_bpiece"
         android:clickable="false"
         android:focusable="false"
         android:scaleType="centerInside"
+        android:src="@drawable/ic_bpiece"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/checker_board_piece"
         app:layout_constraintEnd_toEndOf="@id/checker_board_piece"
         app:layout_constraintStart_toStartOf="@id/checker_board_piece"
@@ -96,11 +96,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:visibility="invisible"
-        android:src="@drawable/ic_checker_king_1"
         android:clickable="false"
         android:focusable="false"
         android:scaleType="centerInside"
+        android:src="@drawable/ic_checker_king_1"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/checker_board_piece"
         app:layout_constraintEnd_toEndOf="@id/checker_board_piece"
         app:layout_constraintStart_toStartOf="@id/checker_board_piece"

@@ -6,21 +6,29 @@
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/drawable/ic_bpiece.xml" value="0.1855" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/drawable/ic_checker_board_part.xml" value="0.124" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/drawable/ic_rpiece.xml" value="0.1855" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/drawable/ic_user.xml" value="0.1465" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw320dp/game_session_layout.xml" value="0.136" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw320dp/player_sign_up_layout.xml" value="0.136" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw480dp/game_session_layout.xml" value="0.1" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw480dp/player_sign_up_layout.xml" value="0.18920765027322403" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw600dp/game_session_layout.xml" value="0.136" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw600dp/player_requests_layout_1.xml" value="0.1044921875" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw600dp/player_requests_layout_2.xml" value="0.1044921875" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw600dp/player_sign_up_layout.xml" value="0.1" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw720dp/game_session_layout.xml" value="0.1" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw720dp/player_sign_up_layout.xml" value="0.1" />
-        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/activity_main.xml" value="0.176" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/checker_piece_layout.xml" value="0.136" />
-        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/game_session_layout.xml" value="0.176" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/game_session_layout.xml" value="0.1" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/game_session_player_layout.xml" value="0.20863616930312098" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/game_session_request_layout.xml" value="0.144" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/guidelines_file_layout.xml" value="0.2509057971014493" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/player_email_sign_up_layout.xml" value="0.2509057971014493" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/player_profile_layout.xml" value="0.1" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/player_requests_layout.xml" value="0.1" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/player_sign_up_layout.xml" value="0.2" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/session_create_dialog_layout.xml" value="0.20863616930312098" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/splash_screen_layout.xml" value="0.10400000000000001" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/test_layout.xml" value="0.152" />
       </map>
     </option>

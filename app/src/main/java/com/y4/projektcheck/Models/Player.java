@@ -1,6 +1,8 @@
 package com.y4.projektcheck.Models;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
     private String playerUserId, playerEmailAddress, playerUserName;
     private double playerCumScore;
     private int matchesPlayed, playerWins, playerLosses, playerDraws;
