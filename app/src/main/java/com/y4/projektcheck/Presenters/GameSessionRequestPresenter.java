@@ -1,12 +1,20 @@
 package com.y4.projektcheck.Presenters;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -14,16 +22,14 @@ import com.y4.projektcheck.Interfaces.CheckerInterfaceHolder;
 import com.y4.projektcheck.Misc.Constants;
 import com.y4.projektcheck.Models.GameSession;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 
 public class GameSessionRequestPresenter implements CheckerInterfaceHolder.GameSessionRequestOperations {
     private PlayersView playersView;
     private GameSession gameSession;
     private Constants constants = new Constants();
     private DocumentSnapshot lastSnap;
-    private String requestingPlayerId, requestedPlayerId;
-    private boolean isNotAvailable;
+    private ListenerRegistration registration;
 
     public GameSessionRequestPresenter() {
     }
@@ -39,9 +45,9 @@ public class GameSessionRequestPresenter implements CheckerInterfaceHolder.GameS
     public void showAvailableSessions() {
         Query query = null;
         if (lastSnap != null) {
-            query = constants.getFirebaseFirestore().collectionGroup("GameSession").whereEqualTo("playerFound", false).whereNotEqualTo("gameSessionPlayers.Player1", Constants.getFirebaseAuth().getCurrentUser().getUid()).startAfter(lastSnap);
+            query = constants.getFirebaseFirestore().collectionGroup("GameSession").whereEqualTo("playerFound", false).startAfter(lastSnap);
         } else {
-            query = constants.getFirebaseFirestore().collectionGroup("GameSession").whereEqualTo("playerFound", false).whereNotEqualTo("gameSessionPlayers.Player1", Constants.getFirebaseAuth().getCurrentUser().getUid());
+            query = constants.getFirebaseFirestore().collectionGroup("GameSession").whereEqualTo("playerFound", false);
         }
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -52,9 +58,10 @@ public class GameSessionRequestPresenter implements CheckerInterfaceHolder.GameS
                         if (task.getResult().isEmpty()) {
                             playersView.getSessionsAvailable(gameSession, true);
                         } else {
-                            playersView.getSessionsAvailable(gameSession, true);
+                            playersView.getSessionsAvailable(gameSession, false);
                         }
                     }
+
                     if (task.getResult().size() != 0) {
                         lastSnap = task.getResult().getDocuments().get(task.getResult().size() - 1);
                     }
@@ -64,21 +71,39 @@ public class GameSessionRequestPresenter implements CheckerInterfaceHolder.GameS
     }
 
     @Override
-    public void requestToPlaySession(String hostPlayerId) {
-
-    }
-
-
-    @Override
-    public void acceptRequest(String requestedSessionId, String hostPlayerId, String joiningPlayerId) {
-        DocumentReference playerRequestingRef = constants.getFirebaseFirestore().collection("Player").document(joiningPlayerId);
-        DocumentReference hostPlayerRef = constants.getFirebaseFirestore().collection("Player").document(hostPlayerId);
-        playerRequestingRef.update("available", false, "inSession", true).addOnCompleteListener(new OnCompleteListener<Void>() {
+    public void listenForUpdate(String hostPlayerId, String joiningPlayerId, String gameSessionId) {
+        Query gameSessionQuery = constants.getFirebaseFirestore().collection("Player").document(hostPlayerId).collection("GameSession").whereEqualTo("gameSessionPlayers.Player2", Constants.getFirebaseAuth().getCurrentUser().getUid());
+        registration = gameSessionQuery.addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("ListenError", "onEvent: ".concat(Objects.requireNonNull(error.getMessage())));
+                }
+                for (DocumentChange documentChange : value.getDocumentChanges()) {
+                    switch (documentChange.getType()) {
+                        case ADDED:
+                            break;
+                        case MODIFIED:
+                            if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerFound"))) {
+                                playersView.getPlaying();
+                                registration.remove();
+                            }
+
+                            break;
+                        case REMOVED:
+                            break;
+                    }
+                }
 
             }
         });
+    }
+
+    @Override
+    public void requestToPlaySession(String hostPlayerId, String joiningPlayerId, String gameSessionId) {
+        DocumentReference hostPlayerRef = constants.getFirebaseFirestore().collection("Player").document(hostPlayerId);
+        DocumentReference playerRequestingRef = constants.getFirebaseFirestore().collection("Player").document(joiningPlayerId);
+        DocumentReference hostPlayerGameRef = constants.getFirebaseFirestore().collection("Player").document(hostPlayerId).collection("GameSession").document(gameSessionId);
         hostPlayerRef.update("available", false, "inSession", true).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -87,14 +112,29 @@ public class GameSessionRequestPresenter implements CheckerInterfaceHolder.GameS
                 }
             }
         });
-        hostPlayerRef.collection("GameSession").document(requestedSessionId).update("playerFound", true, "gameStartTime", FieldValue.serverTimestamp(), "gameSessionPlayers.Player2", joiningPlayerId).addOnCompleteListener(new OnCompleteListener<Void>() {
+        playerRequestingRef.update("available", false, "inSession", true).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+            }
+        });
+        hostPlayerGameRef.update("gameSessionPlayers.Player2", joiningPlayerId, "playerFound", true, "playerOneColour", "White", "playerTwoColour", "Yellow", "gameStartTime", FieldValue.serverTimestamp(), "gameSessionPlayers.Player2", joiningPlayerId, "playerOneTurn", true, "playerTwoTurn", false).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
+                    //playersView.getPlaying();
 
                 }
             }
         });
+        listenForUpdate(hostPlayerId, joiningPlayerId, gameSessionId);
+
+    }
+
+
+    @Override
+    public void acceptRequest(String requestedSessionId, String hostPlayerId, String joiningPlayerId) {
+
     }
 
     @Override
@@ -111,6 +151,11 @@ public class GameSessionRequestPresenter implements CheckerInterfaceHolder.GameS
 
     public interface PlayersView {
         void getSessionsAvailable(GameSession gameSession, boolean isNotAvailable);
-    }
 
+        void getPlayerFound();
+
+        void getColourUpdate(String colour);
+
+        void getPlaying();
+    }
 }

@@ -6,12 +6,12 @@ public class Player implements Serializable {
     private String playerUserId, playerEmailAddress, playerUserName;
     private double playerCumScore;
     private int matchesPlayed, playerWins, playerLosses, playerDraws;
-    private Boolean available, inSession;
+    private Boolean available, inSession, yourTurnInSession;
 
     public Player() {
     }
 
-    public Player(String playerUserId, String playerEmailAddress, String playerUserName, double playerCumScore, int matchesPlayed, int playerWins, int playerLosses, int playerDraws, Boolean available, Boolean inSession) {
+    public Player(String playerUserId, String playerEmailAddress, String playerUserName, double playerCumScore, int matchesPlayed, int playerWins, int playerLosses, int playerDraws, Boolean available, Boolean inSession, Boolean yourTurnInSession) {
         this.playerUserId = playerUserId;
         this.playerEmailAddress = playerEmailAddress;
         this.playerUserName = playerUserName;
@@ -22,6 +22,15 @@ public class Player implements Serializable {
         this.playerDraws = playerDraws;
         this.available = available;
         this.inSession = inSession;
+        this.yourTurnInSession=yourTurnInSession;
+    }
+
+    public Boolean getYourTurnInSession() {
+        return yourTurnInSession;
+    }
+
+    public void setYourTurnInSession(Boolean yourTurnInSession) {
+        this.yourTurnInSession = yourTurnInSession;
     }
 
     public Boolean getAvailable() {

@@ -12,11 +12,10 @@ import android.widget.ImageView;
 
 import com.y4.projektcheck.Misc.GameLogic;
 import com.y4.projektcheck.R;
-import com.y4.projektcheck.Views.GameSessionActivity;
 
 import java.util.ArrayList;
 
-public class GameSessionAdapter extends BaseAdapter {
+public class OtherGameSessionAdapter extends BaseAdapter {
     private Context c;
 
     private AdapterView.OnItemClickListener squareSpaceClick;
@@ -34,10 +33,10 @@ public class GameSessionAdapter extends BaseAdapter {
         this.gameSessionId = gameSessionId;
     }
 
-    public GameSessionAdapter() {
+    public OtherGameSessionAdapter() {
     }
 
-    public GameSessionAdapter(Context c, boolean playerOne, String colourChosen, ArrayList<Integer> squaresAvailable, GridView gridView) {
+    public OtherGameSessionAdapter(Context c, boolean playerOne, String colourChosen, ArrayList<Integer> squaresAvailable, GridView gridView) {
         this.c = c;
         this.playerOne = playerOne;
         this.colourChosen = colourChosen;
@@ -95,15 +94,6 @@ public class GameSessionAdapter extends BaseAdapter {
         return position;
     }
 
-    public void reflectMove(long p) {
-        ImageView im = new ImageView(c);
-        if (GameSessionActivity.otherIntent.hasExtra("playerOne")) {
-            getGridView().findViewById(R.id.checker_board_man_2).findViewWithTag(p).setVisibility(View.VISIBLE);
-        }
-        if (GameSessionActivity.otherIntent.hasExtra("playerTwo")) {
-            im.findViewById(R.id.checker_board_man_1).findViewWithTag(p).setVisibility(View.VISIBLE);
-        }
-    }
 
     @Override
     public View getView(int spacePosition, View view, ViewGroup parent) {

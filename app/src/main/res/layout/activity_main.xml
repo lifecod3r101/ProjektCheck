@@ -41,11 +41,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:src="@drawable/checkers"
-        app:layout_constraintBottom_toTopOf="@id/create_game"
+        app:layout_constraintBottom_toTopOf="@id/your_game"
+
         app:layout_constraintDimensionRatio="1:3"
         app:layout_constraintEnd_toStartOf="@id/end_guideline"
         app:layout_constraintStart_toEndOf="@id/start_guideline"
-        app:layout_constraintTop_toBottomOf="@id/top_guideline" />
+        app:layout_constraintTop_toBottomOf="@id/top_guideline"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profile_img"
@@ -58,6 +60,18 @@
 
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/your_game"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Waiting room"
+        app:layout_constraintBottom_toTopOf="@id/create_game"
+        app:layout_constraintEnd_toStartOf="@id/end_guideline"
+        app:layout_constraintStart_toEndOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/image_menu"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/create_game"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -65,7 +79,7 @@
         app:layout_constraintBottom_toTopOf="@id/join_game"
         app:layout_constraintEnd_toStartOf="@id/end_guideline"
         app:layout_constraintStart_toEndOf="@id/start_guideline"
-        app:layout_constraintTop_toBottomOf="@id/top_guideline"
+        app:layout_constraintTop_toBottomOf="@id/your_game"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <com.google.android.material.button.MaterialButton

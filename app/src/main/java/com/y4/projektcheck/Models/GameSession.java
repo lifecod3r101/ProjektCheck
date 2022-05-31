@@ -1,9 +1,9 @@
 package com.y4.projektcheck.Models;
 
 import com.google.firebase.firestore.DocumentId;
-import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 public class GameSession {
@@ -12,15 +12,18 @@ public class GameSession {
     @DocumentId
     private String gameSessionId;
 
-    private Map<String, Object> gameSessionPlayers, gameSessionPlayerMoves, gameSessionPlayerScores;
+    private Map<String, Object> gameSessionPlayers = new HashMap<>();
+    private Map<String, Integer> gameSessionPlayerMoves = new HashMap<>();
+    private Map<String, Integer> gameSessionPlayerScores = new HashMap<>();
+    private Boolean playerFound, playerOneTurn, playerTwoTurn;
 
-    private Boolean playerFound;
+    private String playerOneColour, playerTwoColour;
 
 
     public GameSession() {
     }
 
-    public GameSession(Date gameStartTime, Date gameEndTime, String gameSessionId, Map<String, Object> gameSessionPlayers, Map<String, Object> gameSessionPlayerScores, Map<String, Object> gameSessionPlayerMoves, Boolean playerFound) {
+    public GameSession(Date gameStartTime, Date gameEndTime, String gameSessionId, Map<String, Object> gameSessionPlayers, Map<String, Integer> gameSessionPlayerScores, Map<String, Integer> gameSessionPlayerMoves, Boolean playerFound, String playerOneColour, String playerTwoColour, Boolean playerOneTurn, Boolean playerTwoTurn) {
         this.gameStartTime = gameStartTime;
         this.gameEndTime = gameEndTime;
         this.gameSessionId = gameSessionId;
@@ -28,6 +31,42 @@ public class GameSession {
         this.gameSessionPlayerScores = gameSessionPlayerScores;
         this.gameSessionPlayerMoves = gameSessionPlayerMoves;
         this.playerFound = playerFound;
+        this.playerOneColour = playerOneColour;
+        this.playerTwoColour = playerTwoColour;
+        this.playerOneTurn = playerOneTurn;
+        this.playerTwoTurn = playerTwoTurn;
+    }
+
+    public Boolean getPlayerOneTurn() {
+        return playerOneTurn;
+    }
+
+    public void setPlayerOneTurn(Boolean playerOneTurn) {
+        this.playerOneTurn = playerOneTurn;
+    }
+
+    public Boolean getPlayerTwoTurn() {
+        return playerTwoTurn;
+    }
+
+    public void setPlayerTwoTurn(Boolean playerTwoTurn) {
+        this.playerTwoTurn = playerTwoTurn;
+    }
+
+    public String getPlayerOneColour() {
+        return playerOneColour;
+    }
+
+    public void setPlayerOneColour(String playerOneColour) {
+        this.playerOneColour = playerOneColour;
+    }
+
+    public String getPlayerTwoColour() {
+        return playerTwoColour;
+    }
+
+    public void setPlayerTwoColour(String playerTwoColour) {
+        this.playerTwoColour = playerTwoColour;
     }
 
     public Boolean getPlayerFound() {
@@ -70,19 +109,19 @@ public class GameSession {
         this.gameSessionPlayers = gameSessionPlayers;
     }
 
-    public Map<String, Object> getGameSessionPlayerMoves() {
+    public Map<String, Integer> getGameSessionPlayerMoves() {
         return gameSessionPlayerMoves;
     }
 
-    public void setGameSessionPlayerMoves(Map<String, Object> gameSessionPlayerMoves) {
+    public void setGameSessionPlayerMoves(Map<String, Integer> gameSessionPlayerMoves) {
         this.gameSessionPlayerMoves = gameSessionPlayerMoves;
     }
 
-    public Map<String, Object> getGameSessionPlayerScores() {
+    public Map<String, Integer> getGameSessionPlayerScores() {
         return gameSessionPlayerScores;
     }
 
-    public void setGameSessionPlayerScores(Map<String, Object> gameSessionPlayerScores) {
+    public void setGameSessionPlayerScores(Map<String, Integer> gameSessionPlayerScores) {
         this.gameSessionPlayerScores = gameSessionPlayerScores;
     }
 }

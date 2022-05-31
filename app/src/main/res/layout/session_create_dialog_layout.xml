@@ -45,26 +45,133 @@
         app:layout_constraintStart_toEndOf="@id/start_guideline"
         app:layout_constraintTop_toBottomOf="@id/top_guideline" />
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/yellow_tool"
-        android:layout_width="wrap_content"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/yellow_card"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_checker_king_2"
-        app:layout_constraintBottom_toTopOf="@id/game_create"
-        app:layout_constraintEnd_toStartOf="@id/white_tool"
+        app:layout_constraintBottom_toTopOf="@id/white_card"
+        app:layout_constraintEnd_toStartOf="@id/end_guideline"
         app:layout_constraintStart_toEndOf="@id/start_guideline"
-        app:layout_constraintTop_toBottomOf="@id/text_select_colour" />
+        app:layout_constraintTop_toBottomOf="@id/text_select_colour">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/white_tool"
-        android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00FF00">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/yellow_start_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.15" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/yellow_end_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.85" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/yellow_top_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.0" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/yellow_bottom_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="1.0" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/yellow_tool"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_rpiece"
+                app:layout_constraintBottom_toTopOf="@id/yellow_bottom_guideline"
+                app:layout_constraintEnd_toStartOf="@id/yellow_king_tool"
+                app:layout_constraintStart_toEndOf="@id/yellow_start_guideline"
+                app:layout_constraintTop_toBottomOf="@id/yellow_top_guideline" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/yellow_king_tool"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_checker_king_2"
+                app:layout_constraintBottom_toTopOf="@id/yellow_bottom_guideline"
+                app:layout_constraintEnd_toStartOf="@id/yellow_end_guideline"
+                app:layout_constraintStart_toEndOf="@id/yellow_tool"
+                app:layout_constraintTop_toBottomOf="@id/yellow_top_guideline" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/white_card"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_checker_king_1"
         app:layout_constraintBottom_toTopOf="@id/game_create"
         app:layout_constraintEnd_toStartOf="@id/end_guideline"
-        app:layout_constraintStart_toEndOf="@id/yellow_tool"
-        app:layout_constraintTop_toBottomOf="@id/text_select_colour" />
+        app:layout_constraintStart_toEndOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/yellow_card">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00FF00">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/white_start_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.15" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/white_end_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.85" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/white_top_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.0" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/white_bottom_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="1.0" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/white_tool"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_bpiece"
+                app:layout_constraintBottom_toTopOf="@id/white_bottom_guideline"
+                app:layout_constraintEnd_toStartOf="@id/white_king_tool"
+                app:layout_constraintStart_toEndOf="@id/white_start_guideline"
+                app:layout_constraintTop_toBottomOf="@id/white_top_guideline" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/white_king_tool"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_checker_king_1"
+                app:layout_constraintBottom_toTopOf="@id/white_bottom_guideline"
+                app:layout_constraintEnd_toStartOf="@id/white_end_guideline"
+                app:layout_constraintStart_toEndOf="@id/white_tool"
+                app:layout_constraintTop_toBottomOf="@id/white_top_guideline" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/game_create"

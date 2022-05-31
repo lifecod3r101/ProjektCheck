@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,17 +19,25 @@ import com.y4.projektcheck.R;
 
 public class MainMenuActivity extends AppCompatActivity implements MainMenuPresenter.MainMenuView {
     private ShapeableImageView profileImg;
-    private MaterialButton createSession, joinSession;
+    private MaterialButton waitingRoom, createSession, joinSession;
     private MainMenuPresenter mainMenuPresenter;
     private Player player;
-    private String intentionSession;
+    private String intentionSession, sessionId;
 
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         profileImg = findViewById(R.id.profile_img);
+        waitingRoom = findViewById(R.id.your_game);
         createSession = findViewById(R.id.create_game);
         joinSession = findViewById(R.id.join_game);
         mainMenuPresenter = new MainMenuPresenter(MainMenuActivity.this, Constants.getFirebaseAuth().getCurrentUser());
@@ -51,6 +60,12 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuPrese
     @Override
     protected void onStart() {
         super.onStart();
+        waitingRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainMenuActivity.this, OwnSessionActivity.class).putExtra("sessionId", getSessionId()));
+            }
+        });
         profileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,6 +134,11 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuPrese
 
     @Override
     public void userExists(FirebaseUser firebaseUser, String action, String extraAction) {
+
+    }
+
+    @Override
+    public void userExists(FirebaseUser firebaseUser, String action, String extraAction, boolean sessionExists) {
         if (firebaseUser == null) {
             //Inflate dialog
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainMenuActivity.this);
@@ -142,17 +162,21 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuPrese
         } else if (action.equals("showProfile")) {
             startActivity(new Intent(MainMenuActivity.this, UserProfileActivity.class));
         } else if (action.equals("createSession")) {
-            mainMenuPresenter.createSession(firebaseUser.getUid());
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainMenuActivity.this);
-            alertDialog.setMessage("Prove yourself worthy of a challenge!");
-            alertDialog.setNeutralButton("For sure!", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            AlertDialog dialog = alertDialog.create();
-            dialog.show();
+            if (mainMenuPresenter.isSessionExists()) {
+                Toast.makeText(MainMenuActivity.this, "Sorry. You have a session that exists.", Toast.LENGTH_SHORT).show();
+            } else {
+                mainMenuPresenter.createSession(firebaseUser.getUid());
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainMenuActivity.this);
+                alertDialog.setMessage("Prove yourself worthy of a challenge!");
+                alertDialog.setNeutralButton("For sure!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog dialog = alertDialog.create();
+                dialog.show();
+            }
         } else if (action.equals("joinSession")) {
             startActivity(new Intent(MainMenuActivity.this, GameSessionRequestActivity.class));
         }

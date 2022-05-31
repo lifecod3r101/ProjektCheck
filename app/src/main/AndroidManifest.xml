@@ -53,6 +53,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.y4.projektcheck.Views.UserProfileActivity" />
+        <activity android:name="com.y4.projektcheck.Views.OwnSessionActivity" />
     </application>
 
 </manifest>

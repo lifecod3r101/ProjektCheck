@@ -3,7 +3,6 @@ package com.y4.projektcheck.Interfaces;
 import android.content.Intent;
 
 import com.google.firebase.auth.FirebaseUser;
-import com.y4.projektcheck.Models.Player;
 
 public interface CheckerInterfaceHolder {
     interface GetUserInfoViewOperations {
@@ -25,10 +24,19 @@ public interface CheckerInterfaceHolder {
 
     }
 
+    interface OwnSessionOperations {
+        void showOwnSession();
+
+        void listenForUpdate();
+    }
+
     interface GameSessionRequestOperations {
         void showAvailableSessions();
 
-        void requestToPlaySession(String hostPlayerId);
+        void requestToPlaySession(String hostPlayerId, String joiningPlayerId, String gameSessionId);
+
+        void listenForUpdate(String hostPlayerId, String joiningPlayerId, String gameSessionId);
+
 
         void acceptRequest(String requestedSessionId, String hostPlayerId, String joiningPlayerId);
 
@@ -41,7 +49,12 @@ public interface CheckerInterfaceHolder {
     }
 
     interface GameSessionOperations {
-        void getPlayerMove();
+        void showGameSessionInfo(String gameSessionId);
+
+        void getPlayerMove(int currPlayerMove, int oppPlayerMove, int prevPiecePos);
+        void getEliminatedPlayerMove(int currPlayerMove, int oppPlayerMove, int eliminatedPlayerMove,int prevPiecePos);
+
+        void listenForMoves(String gameSessionId);
 
         void recordScore();
     }
