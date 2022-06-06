@@ -1,6 +1,8 @@
 package com.y4.projektcheck.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +11,18 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.imageview.ShapeableImageView;
 import com.y4.projektcheck.Misc.GameLogic;
 import com.y4.projektcheck.R;
-import com.y4.projektcheck.Views.GameSessionActivity;
 
 import java.util.ArrayList;
 
-public class GameSessionAdapter extends BaseAdapter {
+public class GameSessionAdapter extends RecyclerView.Adapter<GameSessionAdapter.GameSessionViewHolder> {
     private Context c;
 
     private AdapterView.OnItemClickListener squareSpaceClick;
@@ -24,7 +30,16 @@ public class GameSessionAdapter extends BaseAdapter {
     private String colourChosen;
     private String gameSessionId;
     private GameLogic gameLogic = new GameLogic();
-    private GridView gridView;
+    private RecyclerView gridView;
+    private ArrayList<Integer> spacesAvailableList = new ArrayList<>();
+
+    public ArrayList<Integer> getSpacesAvailableList() {
+        return spacesAvailableList;
+    }
+
+    public void setSpacesAvailableList(ArrayList<Integer> spacesAvailableList) {
+        this.spacesAvailableList = spacesAvailableList;
+    }
 
     public String getGameSessionId() {
         return gameSessionId;
@@ -37,18 +52,31 @@ public class GameSessionAdapter extends BaseAdapter {
     public GameSessionAdapter() {
     }
 
-    public GameSessionAdapter(Context c, boolean playerOne, String colourChosen, ArrayList<Integer> squaresAvailable, GridView gridView) {
+    @NonNull
+    @Override
+    public GameSessionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view=LayoutInflater.from(parent.getContext()).inflate(R.layout.checker_piece_layout, parent, false);
+        return new GameSessionViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull GameSessionViewHolder holder, int position) {
+        gameLogic.gameSetupDef(position, isPlayerOne(), getColourChosen(), holder.itemView, getGridView(), holder.square, holder.piece1, holder.piece2, holder.pieceKing1, holder.pieceKing2);
+
+    }
+
+    public GameSessionAdapter(Context c, boolean playerOne, String colourChosen, ArrayList<Integer> squaresAvailable, RecyclerView gridView) {
         this.c = c;
         this.playerOne = playerOne;
         this.colourChosen = colourChosen;
         this.gridView = gridView;
     }
 
-    public GridView getGridView() {
+    public RecyclerView getGridView() {
         return gridView;
     }
 
-    public void setGridView(GridView gridView) {
+    public void setGridView(RecyclerView gridView) {
         this.gridView = gridView;
     }
 
@@ -80,43 +108,27 @@ public class GameSessionAdapter extends BaseAdapter {
 
 
     @Override
-    public int getCount() {
-        return 64;
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return position;
-    }
-
-
-    @Override
     public long getItemId(int position) {
         return position;
     }
 
-    public void reflectMove(long p) {
-        ImageView im = new ImageView(c);
-        if (GameSessionActivity.otherIntent.hasExtra("playerOne")) {
-            getGridView().findViewById(R.id.checker_board_man_2).findViewWithTag(p).setVisibility(View.VISIBLE);
-        }
-        if (GameSessionActivity.otherIntent.hasExtra("playerTwo")) {
-            im.findViewById(R.id.checker_board_man_1).findViewWithTag(p).setVisibility(View.VISIBLE);
-        }
+    @Override
+    public int getItemCount() {
+        return 64;
     }
 
-    @Override
-    public View getView(int spacePosition, View view, ViewGroup parent) {
-        if (view == null) {
-            LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.checker_piece_layout, parent, false);
-            ImageView square = view.findViewById(R.id.checker_board_piece);
-            ImageButton piece1 = view.findViewById(R.id.checker_board_man_1);
-            ImageButton piece2 = view.findViewById(R.id.checker_board_man_2);
-            ImageButton pieceKing1 = view.findViewById(R.id.checker_board_king_1);
-            ImageButton pieceKing2 = view.findViewById(R.id.checker_board_king_2);
-            gameLogic.gameLogicDef(spacePosition, isPlayerOne(), getColourChosen(), view, getGridView(), square, piece1, piece2, pieceKing1, pieceKing2);
+
+
+    public class GameSessionViewHolder extends RecyclerView.ViewHolder {
+        ShapeableImageView square;
+        ImageButton piece1, piece2, pieceKing1, pieceKing2;
+        public GameSessionViewHolder(@NonNull View itemView) {
+            super(itemView);
+            square = itemView.findViewById(R.id.checker_board_piece);
+            piece1 = itemView.findViewById(R.id.checker_board_man_1);
+            piece2 = itemView.findViewById(R.id.checker_board_man_2);
+            pieceKing1 = itemView.findViewById(R.id.checker_board_king_1);
+            pieceKing2 = itemView.findViewById(R.id.checker_board_king_2);
         }
-        return view;
     }
 }

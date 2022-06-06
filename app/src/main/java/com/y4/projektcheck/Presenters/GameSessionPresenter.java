@@ -1,6 +1,5 @@
 package com.y4.projektcheck.Presenters;
 
-import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,6 +11,7 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
@@ -29,9 +29,9 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
     private GameSessionView gameSessionView;
     private ListenerRegistration listenerRegistration;
     private String gameSessionId, hostId, oppId;
-    private Intent intent;
-    private GameLogic gameLogic;
+    private GameLogic gameLogic = new GameLogic();
     public static boolean isDisabledForP1, isDisabledForP2;
+    public static GameSession session;
 
 
     public String getGameSessionId() {
@@ -62,14 +62,17 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
 
     }
 
-    public GameSessionPresenter(GameSessionView gameSessionView, String gameSessionId, String hostId, String oppId, Intent intent) {
+    public GameSessionPresenter(GameSessionView gameSessionView, String gameSessionId, String hostId, String oppId) {
         this.gameSessionView = gameSessionView;
         this.gameSessionId = gameSessionId;
         this.hostId = hostId;
         this.oppId = oppId;
-        this.intent = intent;
         showGameSessionInfo(gameSessionId);
         listenForMoves(gameSessionId);
+    }
+
+    public GameSessionPresenter(GameSessionView gameSessionView) {
+        this.gameSessionView = gameSessionView;
     }
 
 
@@ -82,6 +85,7 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
                     for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                         GameSession gameSession = documentSnapshot.toObject(GameSession.class);
                         gameSessionView.gameSessionInfo(gameSession);
+                        session = documentSnapshot.toObject(GameSession.class);
                     }
                 }
             }
@@ -90,9 +94,9 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    if (intent.hasExtra("playerOne")) {
+                    if (GameSessionActivity.otherIntent.hasExtra("playerOne")) {
                         gameSessionView.updateTurn(true);
-                    } else if (intent.hasExtra("playerTwo")) {
+                    } else if (GameSessionActivity.otherIntent.hasExtra("playerTwo")) {
                         gameSessionView.updateTurn(false);
                     }
                 }
@@ -101,7 +105,7 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
     }
 
     @Override
-    public void getPlayerMove(int currPlayerMove, int oppPlayerMove, int prevPiecePos) {
+    public void getPlayerMove(int currPlayerMove, int oppPlayerMove, int eliminatedPlayerMove, int prevPiecePos) {
         DocumentReference documentReference = constants.getFirebaseFirestore().collection("Player").document(GameSessionActivity.hostIdPass).collection("GameSession").document(GameSessionActivity.sessionIdPass);
         constants.getFirebaseFirestore().runTransaction(new Transaction.Function<Void>() {
             @Nullable
@@ -111,10 +115,18 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
                 boolean isPlayerOneTurn = Boolean.TRUE.equals(snapshot.getBoolean("playerOneTurn"));
                 boolean isPlayerTwoTurn = Boolean.TRUE.equals(snapshot.getBoolean("playerTwoTurn"));
                 if (isPlayerOneTurn) {
-                    transaction.update(documentReference, "playerOneTurn", false, "playerTwoTurn", true, "gameSessionPlayerMoves.Player1Played", currPlayerMove, "gameSessionPlayerMoves.Player1Reflected", oppPlayerMove, "gameSessionPlayerMoves.Player1Prev", prevPiecePos);
+                    if (eliminatedPlayerMove > 0) {
+                        transaction.update(documentReference, "playerOneTurn", false, "playerTwoTurn", true, "gameSessionPlayerMoves.Player1Played", currPlayerMove, "gameSessionPlayerMoves.Player1Reflected", oppPlayerMove, "gameSessionPlayerMoves.Player2Eliminated", eliminatedPlayerMove, "gameSessionPlayerMoves.Player1Prev", prevPiecePos, "gameSessionAvailableSpaces", FieldValue.arrayRemove(currPlayerMove), "gameSessionAvailableSpaces", FieldValue.arrayUnion(prevPiecePos, gameLogic.reflectPosition(prevPiecePos)), "gameSessionPlayerScores.player1Elimination", FieldValue.increment(5));
+                    } else {
+                        transaction.update(documentReference, "playerOneTurn", false, "playerTwoTurn", true, "gameSessionPlayerMoves.Player1Played", currPlayerMove, "gameSessionPlayerMoves.Player1Reflected", oppPlayerMove, "gameSessionPlayerMoves.Player2Eliminated", eliminatedPlayerMove, "gameSessionPlayerMoves.Player1Prev", prevPiecePos, "gameSessionAvailableSpaces", FieldValue.arrayRemove(currPlayerMove), "gameSessionAvailableSpaces", FieldValue.arrayUnion(prevPiecePos, gameLogic.reflectPosition(prevPiecePos)));
+                    }
                 }
                 if (isPlayerTwoTurn) {
-                    transaction.update(documentReference, "playerOneTurn", true, "playerTwoTurn", false, "gameSessionPlayerMoves.Player2Played", currPlayerMove, "gameSessionPlayerMoves.Player2Reflected", oppPlayerMove, "gameSessionPlayerMoves.Player2Prev", prevPiecePos);
+                    if (eliminatedPlayerMove > 0) {
+                        transaction.update(documentReference, "playerOneTurn", true, "playerTwoTurn", false, "gameSessionPlayerMoves.Player2Played", currPlayerMove, "gameSessionPlayerMoves.Player2Reflected", oppPlayerMove, "gameSessionPlayerMoves.Player1Eliminated", eliminatedPlayerMove, "gameSessionPlayerMoves.Player2Prev", prevPiecePos, "gameSessionAvailableSpaces", FieldValue.arrayRemove(currPlayerMove), "gameSessionAvailableSpaces", FieldValue.arrayUnion(prevPiecePos, gameLogic.reflectPosition(prevPiecePos)), "gameSessionPlayerScores.player2Elimination", FieldValue.increment(5));
+                    } else {
+                        transaction.update(documentReference, "playerOneTurn", true, "playerTwoTurn", false, "gameSessionPlayerMoves.Player2Played", currPlayerMove, "gameSessionPlayerMoves.Player2Reflected", oppPlayerMove, "gameSessionPlayerMoves.Player1Eliminated", eliminatedPlayerMove, "gameSessionPlayerMoves.Player2Prev", prevPiecePos, "gameSessionAvailableSpaces", FieldValue.arrayRemove(currPlayerMove), "gameSessionAvailableSpaces", FieldValue.arrayUnion(prevPiecePos, gameLogic.reflectPosition(prevPiecePos)));
+                    }
                 }
                 return null;
             }
@@ -123,47 +135,15 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
 
-                } else {
-
                 }
             }
         });
     }
 
-    @Override
-    public void getEliminatedPlayerMove(int currPlayerMove, int oppPlayerMove, int eliminatedPlayerMove, int prevPiecePos) {
-        DocumentReference documentReference = constants.getFirebaseFirestore().collection("Player").document(GameSessionActivity.hostIdPass).collection("GameSession").document(GameSessionActivity.sessionIdPass);
-        constants.getFirebaseFirestore().runTransaction(new Transaction.Function<Void>() {
-            @Nullable
-            @Override
-            public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
-                DocumentSnapshot snapshot = transaction.get(documentReference);
-                boolean isPlayerOneTurn = Boolean.TRUE.equals(snapshot.getBoolean("playerOneTurn"));
-                boolean isPlayerTwoTurn = Boolean.TRUE.equals(snapshot.getBoolean("playerTwoTurn"));
-                if (isPlayerOneTurn) {
-                    transaction.update(documentReference, "playerOneTurn", false, "playerTwoTurn", true, "gameSessionPlayerMoves.Player1Played", currPlayerMove, "gameSessionPlayerMoves.Player2Eliminated", eliminatedPlayerMove, "gameSessionPlayerMoves.Player1Reflected", oppPlayerMove, "gameSessionPlayerMoves.Player1Prev", prevPiecePos);
-                }
-                if (isPlayerTwoTurn) {
-                    transaction.update(documentReference, "playerOneTurn", true, "playerTwoTurn", false, "gameSessionPlayerMoves.Player2Played", currPlayerMove, "gameSessionPlayerMoves.Player1Eliminated", eliminatedPlayerMove, "gameSessionPlayerMoves.Player2Reflected", oppPlayerMove, "gameSessionPlayerMoves.Player2Prev", prevPiecePos);
-                }
-                return null;
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-
-                } else {
-
-                }
-            }
-        });
-    }
 
     @Override
     public void listenForMoves(String gameSessionId) {
-        gameLogic = new GameLogic();
-        if (intent.hasExtra("playerOne")) {
+        if (GameSessionActivity.otherIntent.hasExtra("playerOne")) {
             Query gameSessionQry = constants.getFirebaseFirestore().collection("Player").document(getHostId()).collection("GameSession");
             listenerRegistration = gameSessionQry.whereEqualTo("gameSessionPlayers.Player1", getHostId()).addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
@@ -172,18 +152,12 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
                         Log.e("MoveErrorListen", error.getMessage());
                     }
                     for (DocumentChange documentChange : value.getDocumentChanges()) {
+                        session = documentChange.getDocument().toObject(GameSession.class);
                         switch (documentChange.getType()) {
                             case ADDED:
                                 break;
                             case MODIFIED:
                                 if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerOneTurn"))) {
-                                    gameSessionView.reflect(documentChange.getDocument().getLong("gameSessionPlayerMoves.Player2Reflected"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player2Prev"), false);
-                                    gameSessionView.updateTurn(true);
-                                } else if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerTwoTurn"))) {
-                                    gameSessionView.updateTurn(false);
-                                    isDisabledForP1 = true;
-                                }
-                                if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerOneTurn")) && documentChange.getDocument().contains("gameSessionPlayerMoves.Player1Eliminated")) {
                                     gameSessionView.reflect(documentChange.getDocument().getLong("gameSessionPlayerMoves.Player2Reflected"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player2Prev"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player1Eliminated"), false);
                                     gameSessionView.updateTurn(true);
                                 } else if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerTwoTurn"))) {
@@ -197,8 +171,7 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
                     }
                 }
             });
-        }
-        else if (intent.hasExtra("playerTwo")) {
+        } else if (GameSessionActivity.otherIntent.hasExtra("playerTwo")) {
             Query gameSessionQry = constants.getFirebaseFirestore().collection("Player").document(hostId).collection("GameSession");
             listenerRegistration = gameSessionQry.whereEqualTo("gameSessionPlayers.Player1", hostId).addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
@@ -207,19 +180,13 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
                         Log.e("MoveErrorListen", error.getMessage());
                     }
                     for (DocumentChange documentChange : value.getDocumentChanges()) {
+                        session = documentChange.getDocument().toObject(GameSession.class);
                         switch (documentChange.getType()) {
                             case ADDED:
                                 break;
                             case MODIFIED:
                                 if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerTwoTurn"))) {
-                                    gameSessionView.reflect(documentChange.getDocument().getLong("gameSessionPlayerMoves.Player1Reflected"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player1Prev"), true);
-                                    gameSessionView.updateTurn(true);
-                                } else if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerOneTurn"))) {
-                                    gameSessionView.updateTurn(false);
-                                    isDisabledForP2 = true;
-                                }
-                                if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerTwoTurn")) && documentChange.getDocument().contains("gameSessionPlayerMoves.Player2Eliminated")) {
-                                    gameSessionView.reflect(documentChange.getDocument().getLong("gameSessionPlayerMoves.Player1Reflected"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player1Prev"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player2Eliminated"), false);
+                                    gameSessionView.reflect(documentChange.getDocument().getLong("gameSessionPlayerMoves.Player1Reflected"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player1Prev"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player2Eliminated"), true);
                                     gameSessionView.updateTurn(true);
                                 } else if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerOneTurn"))) {
                                     gameSessionView.updateTurn(false);
@@ -245,8 +212,6 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
         void gameSessionInfo(GameSession gameSession);
 
         void updateTurn(boolean isTurn);
-
-        void reflect(long reflect, long prev, boolean isPlayerOne);
 
         void reflect(long reflect, long prev, long eliminated, boolean isPlayerOne);
     }

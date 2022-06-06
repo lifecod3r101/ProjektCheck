@@ -2,6 +2,7 @@ package com.y4.projektcheck.Models;
 
 import com.google.firebase.firestore.DocumentId;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,14 +17,14 @@ public class GameSession {
     private Map<String, Integer> gameSessionPlayerMoves = new HashMap<>();
     private Map<String, Integer> gameSessionPlayerScores = new HashMap<>();
     private Boolean playerFound, playerOneTurn, playerTwoTurn;
-
     private String playerOneColour, playerTwoColour;
+    private ArrayList<Integer> gameSessionAvailableSpaces=new ArrayList<>();
 
 
     public GameSession() {
     }
 
-    public GameSession(Date gameStartTime, Date gameEndTime, String gameSessionId, Map<String, Object> gameSessionPlayers, Map<String, Integer> gameSessionPlayerScores, Map<String, Integer> gameSessionPlayerMoves, Boolean playerFound, String playerOneColour, String playerTwoColour, Boolean playerOneTurn, Boolean playerTwoTurn) {
+    public GameSession(Date gameStartTime, Date gameEndTime, String gameSessionId, Map<String, Object> gameSessionPlayers, Map<String, Integer> gameSessionPlayerScores, Map<String, Integer> gameSessionPlayerMoves, Boolean playerFound, String playerOneColour, String playerTwoColour, Boolean playerOneTurn, Boolean playerTwoTurn, ArrayList<Integer> gameSessionAvailableSpaces) {
         this.gameStartTime = gameStartTime;
         this.gameEndTime = gameEndTime;
         this.gameSessionId = gameSessionId;
@@ -35,6 +36,15 @@ public class GameSession {
         this.playerTwoColour = playerTwoColour;
         this.playerOneTurn = playerOneTurn;
         this.playerTwoTurn = playerTwoTurn;
+        this.gameSessionAvailableSpaces=gameSessionAvailableSpaces;
+    }
+
+    public ArrayList<Integer> getGameSessionAvailableSpaces() {
+        return gameSessionAvailableSpaces;
+    }
+
+    public void setGameSessionAvailableSpaces(ArrayList<Integer> gameSessionAvailableSpaces) {
+        this.gameSessionAvailableSpaces = gameSessionAvailableSpaces;
     }
 
     public Boolean getPlayerOneTurn() {

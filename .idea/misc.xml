@@ -20,7 +20,7 @@
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw720dp/player_sign_up_layout.xml" value="0.1" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/activity_main.xml" value="0.136" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/checker_piece_layout.xml" value="0.136" />
-        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/game_session_layout.xml" value="0.1" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/game_session_layout.xml" value="0.12" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/game_session_player_layout.xml" value="0.20863616930312098" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/game_session_request_layout.xml" value="0.144" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/guidelines_file_layout.xml" value="0.2509057971014493" />
@@ -44,7 +44,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.264" />
+        <option name="scale" value="0.12" />
       </ProjectState>
     </option>
   </component>

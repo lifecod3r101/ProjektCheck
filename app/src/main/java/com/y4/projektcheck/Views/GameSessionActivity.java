@@ -4,14 +4,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textview.MaterialTextView;
 import com.y4.projektcheck.Adapters.GameSessionAdapter;
+import com.y4.projektcheck.Misc.CheckerPieceDecorator;
 import com.y4.projektcheck.Misc.GameLogic;
 import com.y4.projektcheck.Models.GameSession;
 import com.y4.projektcheck.Presenters.GameSessionPresenter;
@@ -19,7 +21,7 @@ import com.y4.projektcheck.R;
 
 public class GameSessionActivity extends AppCompatActivity implements GameSessionPresenter.GameSessionView {
     private GameSessionAdapter gameSessionAdapter;
-    private GridView gridView;
+    private RecyclerView gridView;
     private GameSessionPresenter gameSessionPresenter;
     private SharedPreferences gameSessionIdPref;
     private String sessionId, hostId, oppId, playerOneStr, playerTwoStr;
@@ -37,9 +39,9 @@ public class GameSessionActivity extends AppCompatActivity implements GameSessio
         playerTextName = findViewById(R.id.player_name_text);
         gridView = findViewById(R.id.checker_board);
         oppNameText = findViewById(R.id.opp_player_name_text);
-        gameLogic = new GameLogic();
         intent = getIntent();
         otherIntent = getIntent();
+        gameLogic = new GameLogic();
         gameSessionAdapter = new GameSessionAdapter();
         gameSessionIdPref = getSharedPreferences("sessionId", MODE_PRIVATE);
         sessionId = gameSessionIdPref.getString("sessionId", "");
@@ -52,18 +54,18 @@ public class GameSessionActivity extends AppCompatActivity implements GameSessio
         gameSessionAdapter.setC(GameSessionActivity.this);
         gameSessionAdapter.setGridView(gridView);
         gameSessionAdapter.setGameSessionId(sessionId);
-        gameLogic.setIntent(intent);
+        gridView.setLayoutManager(new GridLayoutManager(GameSessionActivity.this, 8));
+        gridView.setHasFixedSize(true);
+        gridView.addItemDecoration(new CheckerPieceDecorator(1));
         if (intent.hasExtra("playerOne")) {
             gameSessionAdapter.setColourChosen("Yellow");
             gameSessionAdapter.setPlayerOne(true);
-            gameLogic.setIntent(intent);
-            gameSessionPresenter = new GameSessionPresenter(GameSessionActivity.this, sessionId, hostId, oppId, intent);
+            gameSessionPresenter = new GameSessionPresenter(GameSessionActivity.this, sessionId, hostId, oppId);
         }
         if (intent.hasExtra("playerTwo")) {
             gameSessionAdapter.setColourChosen("White");
             gameSessionAdapter.setPlayerOne(false);
-            gameLogic.setIntent(intent);
-            gameSessionPresenter = new GameSessionPresenter(GameSessionActivity.this, sessionId, hostId, oppId, intent);
+            gameSessionPresenter = new GameSessionPresenter(GameSessionActivity.this, sessionId, hostId, oppId);
         }
         gridView.setAdapter(gameSessionAdapter);
     }
@@ -71,7 +73,6 @@ public class GameSessionActivity extends AppCompatActivity implements GameSessio
     @Override
     protected void onStart() {
         super.onStart();
-
     }
 
     @Override
@@ -104,12 +105,10 @@ public class GameSessionActivity extends AppCompatActivity implements GameSessio
         if (intent.hasExtra("playerOne")) {
             playerTextName.setText(String.valueOf(gameSession.getGameSessionPlayers().get("Player1")));
             oppNameText.setText(String.valueOf(gameSession.getGameSessionPlayers().get("Player2")));
-            gameLogic.setIntent(intent);
         }
         if (intent.hasExtra("playerTwo")) {
             playerTextName.setText(String.valueOf(gameSession.getGameSessionPlayers().get("Player2")));
             oppNameText.setText(String.valueOf(gameSession.getGameSessionPlayers().get("Player1")));
-            gameLogic.setIntent(intent);
         }
         sessionIdPass = gameSession.getGameSessionId();
         hostIdPass = (String) gameSession.getGameSessionPlayers().get("Player1");
@@ -122,38 +121,51 @@ public class GameSessionActivity extends AppCompatActivity implements GameSessio
             Toast.makeText(GameSessionActivity.this, "Your Turn", Toast.LENGTH_SHORT).show();
             gameLogic.setPlayerMoveMade(false);
             gameLogic.setOppMoveMade(true);
-            isYourTurnP1=true;
-
-
+            isYourTurnP1 = true;
         } else {
             Toast.makeText(GameSessionActivity.this, "Opponent's Turn", Toast.LENGTH_SHORT).show();
             gameLogic.setPlayerMoveMade(true);
             gameLogic.setOppMoveMade(false);
-            isYourTurnP1=false;
-        }
-    }
-
-    @Override
-    public void reflect(long reflect, long prev, boolean isPlayerOne) {
-        if (isPlayerOne) {
-            gridView.getChildAt((int) reflect).findViewById(R.id.checker_board_man_1).setVisibility(View.VISIBLE);
-            gridView.getChildAt(gameLogic.reflectPosition((int) prev)).findViewById(R.id.checker_board_man_1).setVisibility(View.INVISIBLE);
-        } else {
-            gridView.getChildAt((int) reflect).findViewById(R.id.checker_board_man_2).setVisibility(View.VISIBLE);
-            gridView.getChildAt(gameLogic.reflectPosition((int) prev)).findViewById(R.id.checker_board_man_2).setVisibility(View.INVISIBLE);
+            isYourTurnP1 = false;
         }
     }
 
     @Override
     public void reflect(long reflect, long prev, long eliminated, boolean isPlayerOne) {
         if (isPlayerOne) {
-            gridView.getChildAt((int) reflect).findViewById(R.id.checker_board_man_1).setVisibility(View.VISIBLE);
-            gridView.getChildAt(gameLogic.reflectPosition((int) prev)).findViewById(R.id.checker_board_man_1).setVisibility(View.INVISIBLE);
-            gridView.getChildAt(gameLogic.reflectPosition((int) eliminated)).findViewById(R.id.checker_board_man_1).setVisibility(View.INVISIBLE);
+            if (reflect == 1 || reflect == 3 || reflect == 5 || reflect == 7 || reflect == gameLogic.reflectPosition(1) || reflect == gameLogic.reflectPosition(3) || reflect == gameLogic.reflectPosition(5) || reflect == gameLogic.reflectPosition(7)) {
+                gridView.getChildAt((int) reflect).findViewById(R.id.checker_board_king_1).setVisibility(View.VISIBLE);
+                gridView.getChildAt(gameLogic.reflectPosition((int) prev)).findViewById(R.id.checker_board_man_1).setVisibility(View.INVISIBLE);
+                gridView.getChildAt(gameLogic.reflectPosition((int) eliminated)).findViewById(R.id.checker_board_man_2).setVisibility(View.INVISIBLE);
+
+            } else if (gridView.getChildAt(gameLogic.reflectPosition((int) prev)).findViewById(R.id.checker_board_king_1).getVisibility() == View.VISIBLE) {
+                gridView.getChildAt((int) reflect).findViewById(R.id.checker_board_king_1).setVisibility(View.VISIBLE);
+                gridView.getChildAt(gameLogic.reflectPosition((int) prev)).findViewById(R.id.checker_board_king_1).setVisibility(View.INVISIBLE);
+                gridView.getChildAt(gameLogic.reflectPosition((int) eliminated)).findViewById(R.id.checker_board_king_2).setVisibility(View.INVISIBLE);
+
+            } else {
+                gridView.getChildAt((int) reflect).findViewById(R.id.checker_board_man_1).setVisibility(View.VISIBLE);
+                gridView.getChildAt(gameLogic.reflectPosition((int) prev)).findViewById(R.id.checker_board_man_1).setVisibility(View.INVISIBLE);
+                gridView.getChildAt(gameLogic.reflectPosition((int) eliminated)).findViewById(R.id.checker_board_man_2).setVisibility(View.INVISIBLE);
+
+            }
         } else {
-            gridView.getChildAt((int) reflect).findViewById(R.id.checker_board_man_2).setVisibility(View.VISIBLE);
-            gridView.getChildAt(gameLogic.reflectPosition((int) prev)).findViewById(R.id.checker_board_man_2).setVisibility(View.INVISIBLE);
-            gridView.getChildAt(gameLogic.reflectPosition((int) eliminated)).findViewById(R.id.checker_board_man_2).setVisibility(View.INVISIBLE);
+            if (reflect == 1 || reflect == 3 || reflect == 5 || reflect == 7 || reflect == gameLogic.reflectPosition(1) || reflect == gameLogic.reflectPosition(3) || reflect == gameLogic.reflectPosition(5) || reflect == gameLogic.reflectPosition(7)) {
+                gridView.getChildAt((int) reflect).findViewById(R.id.checker_board_king_2).setVisibility(View.VISIBLE);
+                gridView.getChildAt(gameLogic.reflectPosition((int) prev)).findViewById(R.id.checker_board_man_2).setVisibility(View.INVISIBLE);
+                gridView.getChildAt(gameLogic.reflectPosition((int) eliminated)).findViewById(R.id.checker_board_man_1).setVisibility(View.INVISIBLE);
+
+            } else if (gridView.getChildAt(gameLogic.reflectPosition((int) prev)).findViewById(R.id.checker_board_king_2).getVisibility()==View.VISIBLE) {
+                gridView.getChildAt((int) reflect).findViewById(R.id.checker_board_king_2).setVisibility(View.VISIBLE);
+                gridView.getChildAt(gameLogic.reflectPosition((int) prev)).findViewById(R.id.checker_board_king_2).setVisibility(View.INVISIBLE);
+                gridView.getChildAt(gameLogic.reflectPosition((int) eliminated)).findViewById(R.id.checker_board_king_1).setVisibility(View.INVISIBLE);
+
+            } else {
+                gridView.getChildAt((int) reflect).findViewById(R.id.checker_board_man_2).setVisibility(View.VISIBLE);
+                gridView.getChildAt(gameLogic.reflectPosition((int) prev)).findViewById(R.id.checker_board_man_2).setVisibility(View.INVISIBLE);
+                gridView.getChildAt(gameLogic.reflectPosition((int) eliminated)).findViewById(R.id.checker_board_man_1).setVisibility(View.INVISIBLE);
+
+            }
         }
     }
 }

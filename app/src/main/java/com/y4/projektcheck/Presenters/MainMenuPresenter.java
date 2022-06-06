@@ -15,6 +15,7 @@ import com.y4.projektcheck.Models.GameSession;
 import com.y4.projektcheck.Models.Player;
 import com.y4.projektcheck.Views.MainMenuActivity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -91,17 +92,35 @@ public class MainMenuPresenter implements CheckerInterfaceHolder.MainMenuOperati
     @Override
     public void createSession(String hostPlayerId) {
         gameSession = new GameSession();
+        ArrayList<Integer> spacesAvailableList = new ArrayList<>();
+        spacesAvailableList.add(24);
+        spacesAvailableList.add(26);
+        spacesAvailableList.add(28);
+        spacesAvailableList.add(30);
+        spacesAvailableList.add(33);
+        spacesAvailableList.add(35);
+        spacesAvailableList.add(37);
+        spacesAvailableList.add(39);
         Map<String, Object> playingPlayers = new HashMap<>();
+        Map<String, Integer> sessionMoves = new HashMap<>();
+        Map<String, Integer> playerScores = new HashMap<>();
+        sessionMoves.put("Player1Played", 0);
+        sessionMoves.put("Player1Prev", 0);
+        sessionMoves.put("Player1Reflected", 0);
+        sessionMoves.put("Player1Eliminated", 0);
+        sessionMoves.put("Player2Played", 0);
+        sessionMoves.put("Player2Prev", 0);
+        sessionMoves.put("Player2Reflected", 0);
+        sessionMoves.put("Player2Eliminated", 0);
         playingPlayers.put("Player1", hostPlayerId);
         playingPlayers.put("Player2", "");
-        gameSession.setGameSessionPlayers(playingPlayers);
-        Map<String, Integer> sessionMoves = new HashMap<>();
-        playingPlayers.put("Player1Played", 0);
-        playingPlayers.put("Player1Reflected", 0);
-        playingPlayers.put("Player2Played", 0);
-        playingPlayers.put("Player2Reflected", 0);
+        playerScores.put("player1Elimination", 0);
+        playerScores.put("player2Elimination", 0);
+        gameSession.setGameSessionPlayerScores(playerScores);
         gameSession.setGameSessionPlayerMoves(sessionMoves);
+        gameSession.setGameSessionPlayers(playingPlayers);
         gameSession.setPlayerFound(false);
+        gameSession.setGameSessionAvailableSpaces(spacesAvailableList);
         String sessionId = constants.getFirebaseFirestore().collection("Player").document(hostPlayerId).collection("GameSession").document().getId();
         gameSession.setGameSessionId(sessionId);
         constants.getFirebaseFirestore().collection("Player").document(hostPlayerId).collection("GameSession").document(sessionId).set(gameSession).addOnCompleteListener(new OnCompleteListener<Void>() {

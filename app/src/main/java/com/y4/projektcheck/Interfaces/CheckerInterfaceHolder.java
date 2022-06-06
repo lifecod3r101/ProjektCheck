@@ -51,8 +51,7 @@ public interface CheckerInterfaceHolder {
     interface GameSessionOperations {
         void showGameSessionInfo(String gameSessionId);
 
-        void getPlayerMove(int currPlayerMove, int oppPlayerMove, int prevPiecePos);
-        void getEliminatedPlayerMove(int currPlayerMove, int oppPlayerMove, int eliminatedPlayerMove,int prevPiecePos);
+        void getPlayerMove(int currPlayerMove, int oppPlayerMove, int eliminatedPlayerMove, int prevPiecePos);
 
         void listenForMoves(String gameSessionId);
 
