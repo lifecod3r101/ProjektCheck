@@ -33,10 +33,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="1.0" />
 
-
-
-
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/request_viewpager"
         android:layout_width="0dp"

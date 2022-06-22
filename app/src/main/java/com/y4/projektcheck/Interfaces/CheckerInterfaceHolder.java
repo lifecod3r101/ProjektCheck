@@ -20,7 +20,7 @@ public interface CheckerInterfaceHolder {
     interface MainMenuOperations {
         void getUserInformation(FirebaseUser firebaseUser);
 
-        void createSession(String hostPlayerId);
+        void createSession(String hostPlayerId,String hostUserName);
 
     }
 
@@ -33,7 +33,7 @@ public interface CheckerInterfaceHolder {
     interface GameSessionRequestOperations {
         void showAvailableSessions();
 
-        void requestToPlaySession(String hostPlayerId, String joiningPlayerId, String gameSessionId);
+        void requestToPlaySession(String hostPlayerId, String joiningPlayerId, String joiningPlayerUserName,String gameSessionId);
 
         void listenForUpdate(String hostPlayerId, String joiningPlayerId, String gameSessionId);
 
@@ -51,11 +51,15 @@ public interface CheckerInterfaceHolder {
     interface GameSessionOperations {
         void showGameSessionInfo(String gameSessionId);
 
+        void updateOnTerminate();
+
+        void updateOnLeave();
+
         void getPlayerMove(int currPlayerMove, int oppPlayerMove, int eliminatedPlayerMove, int prevPiecePos);
 
         void listenForMoves(String gameSessionId);
 
-        void recordScore();
+        void gameEnded(String winningPlayerId,String losingPlayerId,long winningPlayerScore, long losingPlayerScore);
     }
 
 

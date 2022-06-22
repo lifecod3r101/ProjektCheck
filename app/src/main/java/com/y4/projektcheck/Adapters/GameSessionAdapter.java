@@ -7,11 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -61,7 +57,13 @@ public class GameSessionAdapter extends RecyclerView.Adapter<GameSessionAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull GameSessionViewHolder holder, int position) {
-        gameLogic.gameSetupDef(position, isPlayerOne(), getColourChosen(), holder.itemView, getGridView(), holder.square, holder.piece1, holder.piece2, holder.pieceKing1, holder.pieceKing2);
+        DisplayMetrics metrics=new DisplayMetrics();
+        ((Activity)c).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int deviceWidth=metrics.widthPixels / 8;
+        int deviceHeight=metrics.heightPixels / 8;
+        holder.square.getLayoutParams().width=deviceWidth;
+        holder.square.getLayoutParams().height=deviceHeight;
+        gameLogic.gameSetupDef(position, isPlayerOne(), getColourChosen(), holder.itemView, getGridView(), holder.square, holder.pieceYellow, holder.pieceWhite, holder.pieceKingYellow, holder.pieceKingWhite);
 
     }
 
@@ -121,14 +123,14 @@ public class GameSessionAdapter extends RecyclerView.Adapter<GameSessionAdapter.
 
     public class GameSessionViewHolder extends RecyclerView.ViewHolder {
         ShapeableImageView square;
-        ImageButton piece1, piece2, pieceKing1, pieceKing2;
+        ImageButton pieceYellow, pieceWhite, pieceKingYellow, pieceKingWhite;
         public GameSessionViewHolder(@NonNull View itemView) {
             super(itemView);
             square = itemView.findViewById(R.id.checker_board_piece);
-            piece1 = itemView.findViewById(R.id.checker_board_man_1);
-            piece2 = itemView.findViewById(R.id.checker_board_man_2);
-            pieceKing1 = itemView.findViewById(R.id.checker_board_king_1);
-            pieceKing2 = itemView.findViewById(R.id.checker_board_king_2);
+            pieceYellow = itemView.findViewById(R.id.checker_board_man_1);
+            pieceWhite = itemView.findViewById(R.id.checker_board_man_2);
+            pieceKingYellow = itemView.findViewById(R.id.checker_board_king_1);
+            pieceKingWhite = itemView.findViewById(R.id.checker_board_king_2);
         }
     }
 }

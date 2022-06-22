@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textview.MaterialTextView;
 import com.y4.projektcheck.Models.GameSession;
-import com.y4.projektcheck.Models.Player;
 import com.y4.projektcheck.R;
 
 import java.util.ArrayList;
@@ -56,7 +55,10 @@ public class GameSessionRequestsAdapter extends RecyclerView.Adapter<GameSession
     @Override
     public void onBindViewHolder(@NonNull GameSessionRequestsViewHolder holder, int position) {
         if (sessionsArrayList.get(position).getGameSessionPlayers() != null && !sessionsArrayList.get(position).getGameSessionPlayers().isEmpty()) {
-            holder.playerName.setText(String.valueOf(sessionsArrayList.get(position).getGameSessionPlayers().get("Player1")));
+            holder.playerName.setText("Host: "
+                    .concat(String.valueOf(sessionsArrayList.get(position).getGameSessionPlayers().get("Player1UserName")))
+                    .concat("\n").concat("Session ID: ".concat(sessionsArrayList.get(position).getGameSessionId())));
+
         }
         holder.bindClickSession(sessionsArrayList.get(position));
     }

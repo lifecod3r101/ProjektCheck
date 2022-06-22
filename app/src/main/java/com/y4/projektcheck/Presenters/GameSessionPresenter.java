@@ -1,5 +1,9 @@
 package com.y4.projektcheck.Presenters;
 
+import static com.y4.projektcheck.Views.GameSessionActivity.isWinner;
+import static com.y4.projektcheck.Views.GameSessionActivity.playerOneCumulativeScore;
+import static com.y4.projektcheck.Views.GameSessionActivity.playerTwoCumulativeScore;
+
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -30,7 +34,6 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
     private ListenerRegistration listenerRegistration;
     private String gameSessionId, hostId, oppId;
     private GameLogic gameLogic = new GameLogic();
-    public static boolean isDisabledForP1, isDisabledForP2;
     public static GameSession session;
 
 
@@ -105,6 +108,30 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
     }
 
     @Override
+    public void updateOnTerminate() {
+        constants.getFirebaseFirestore().collection("Player").document(GameSessionActivity.hostIdPass).collection("GameSession").document(GameSessionActivity.sessionIdPass).update("hostTerminate", true, "gameEndTime", FieldValue.serverTimestamp()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+
+                }
+            }
+        });
+    }
+
+    @Override
+    public void updateOnLeave() {
+        constants.getFirebaseFirestore().collection("Player").document(GameSessionActivity.hostIdPass).collection("GameSession").document(GameSessionActivity.sessionIdPass).update("oppLeft", true, "gameSessionPlayers.Player2", "", "gameSessionPlayers.Player2UserName", "", "playerFound", false, "playerOneTurn", false, "playerTwoTurn", false).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+
+                }
+            }
+        });
+    }
+
+    @Override
     public void getPlayerMove(int currPlayerMove, int oppPlayerMove, int eliminatedPlayerMove, int prevPiecePos) {
         DocumentReference documentReference = constants.getFirebaseFirestore().collection("Player").document(GameSessionActivity.hostIdPass).collection("GameSession").document(GameSessionActivity.sessionIdPass);
         constants.getFirebaseFirestore().runTransaction(new Transaction.Function<Void>() {
@@ -116,16 +143,16 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
                 boolean isPlayerTwoTurn = Boolean.TRUE.equals(snapshot.getBoolean("playerTwoTurn"));
                 if (isPlayerOneTurn) {
                     if (eliminatedPlayerMove > 0) {
-                        transaction.update(documentReference, "playerOneTurn", false, "playerTwoTurn", true, "gameSessionPlayerMoves.Player1Played", currPlayerMove, "gameSessionPlayerMoves.Player1Reflected", oppPlayerMove, "gameSessionPlayerMoves.Player2Eliminated", eliminatedPlayerMove, "gameSessionPlayerMoves.Player1Prev", prevPiecePos, "gameSessionAvailableSpaces", FieldValue.arrayRemove(currPlayerMove), "gameSessionAvailableSpaces", FieldValue.arrayUnion(prevPiecePos, gameLogic.reflectPosition(prevPiecePos)), "gameSessionPlayerScores.player1Elimination", FieldValue.increment(5));
+                        transaction.update(documentReference, "playerOneTurn", false, "playerTwoTurn", true, "gameSessionPlayerMoves.Player1Played", currPlayerMove, "gameSessionPlayerMoves.Player1Reflected", oppPlayerMove, "gameSessionPlayerMoves.Player2Eliminated", eliminatedPlayerMove, "eliminatedPiecesCount.player2PiecesRemoved", FieldValue.increment(1), "gameSessionPlayerMoves.Player1Prev", prevPiecePos, "gameSessionPlayerScores.player1Elimination", FieldValue.increment(5));
                     } else {
-                        transaction.update(documentReference, "playerOneTurn", false, "playerTwoTurn", true, "gameSessionPlayerMoves.Player1Played", currPlayerMove, "gameSessionPlayerMoves.Player1Reflected", oppPlayerMove, "gameSessionPlayerMoves.Player2Eliminated", eliminatedPlayerMove, "gameSessionPlayerMoves.Player1Prev", prevPiecePos, "gameSessionAvailableSpaces", FieldValue.arrayRemove(currPlayerMove), "gameSessionAvailableSpaces", FieldValue.arrayUnion(prevPiecePos, gameLogic.reflectPosition(prevPiecePos)));
+                        transaction.update(documentReference, "playerOneTurn", false, "playerTwoTurn", true, "gameSessionPlayerMoves.Player1Played", currPlayerMove, "gameSessionPlayerMoves.Player1Reflected", oppPlayerMove, "gameSessionPlayerMoves.Player2Eliminated", eliminatedPlayerMove, "gameSessionPlayerMoves.Player1Prev", prevPiecePos);
                     }
                 }
                 if (isPlayerTwoTurn) {
                     if (eliminatedPlayerMove > 0) {
-                        transaction.update(documentReference, "playerOneTurn", true, "playerTwoTurn", false, "gameSessionPlayerMoves.Player2Played", currPlayerMove, "gameSessionPlayerMoves.Player2Reflected", oppPlayerMove, "gameSessionPlayerMoves.Player1Eliminated", eliminatedPlayerMove, "gameSessionPlayerMoves.Player2Prev", prevPiecePos, "gameSessionAvailableSpaces", FieldValue.arrayRemove(currPlayerMove), "gameSessionAvailableSpaces", FieldValue.arrayUnion(prevPiecePos, gameLogic.reflectPosition(prevPiecePos)), "gameSessionPlayerScores.player2Elimination", FieldValue.increment(5));
+                        transaction.update(documentReference, "playerOneTurn", true, "playerTwoTurn", false, "gameSessionPlayerMoves.Player2Played", currPlayerMove, "gameSessionPlayerMoves.Player2Reflected", oppPlayerMove, "gameSessionPlayerMoves.Player1Eliminated", eliminatedPlayerMove, "eliminatedPiecesCount.player1PiecesRemoved", FieldValue.increment(1), "gameSessionPlayerMoves.Player2Prev", prevPiecePos, "gameSessionPlayerScores.player2Elimination", FieldValue.increment(5));
                     } else {
-                        transaction.update(documentReference, "playerOneTurn", true, "playerTwoTurn", false, "gameSessionPlayerMoves.Player2Played", currPlayerMove, "gameSessionPlayerMoves.Player2Reflected", oppPlayerMove, "gameSessionPlayerMoves.Player1Eliminated", eliminatedPlayerMove, "gameSessionPlayerMoves.Player2Prev", prevPiecePos, "gameSessionAvailableSpaces", FieldValue.arrayRemove(currPlayerMove), "gameSessionAvailableSpaces", FieldValue.arrayUnion(prevPiecePos, gameLogic.reflectPosition(prevPiecePos)));
+                        transaction.update(documentReference, "playerOneTurn", true, "playerTwoTurn", false, "gameSessionPlayerMoves.Player2Played", currPlayerMove, "gameSessionPlayerMoves.Player2Reflected", oppPlayerMove, "gameSessionPlayerMoves.Player1Eliminated", eliminatedPlayerMove, "gameSessionPlayerMoves.Player2Prev", prevPiecePos);
                     }
                 }
                 return null;
@@ -158,11 +185,29 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
                                 break;
                             case MODIFIED:
                                 if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerOneTurn"))) {
-                                    gameSessionView.reflect(documentChange.getDocument().getLong("gameSessionPlayerMoves.Player2Reflected"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player2Prev"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player1Eliminated"), false);
-                                    gameSessionView.updateTurn(true);
+                                    if (documentChange.getDocument().getLong("eliminatedPiecesCount.player2PiecesRemoved") >= 12) {
+                                        isWinner = true;
+                                        playerOneCumulativeScore = documentChange.getDocument().getLong("gameSessionPlayerScores.player1Elimination");
+                                        playerTwoCumulativeScore = documentChange.getDocument().getLong("gameSessionPlayerScores.player2Elimination");
+                                        gameSessionView.updateTurn(true);
+                                    } else {
+                                        gameSessionView.reflect(documentChange.getDocument().getLong("gameSessionPlayerMoves.Player2Reflected"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player2Prev"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player1Eliminated"), false);
+                                        gameSessionView.updateTurn(true);
+                                    }
                                 } else if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerTwoTurn"))) {
-                                    gameSessionView.updateTurn(false);
-                                    isDisabledForP1 = true;
+                                    if (documentChange.getDocument().getLong("eliminatedPiecesCount.player1PiecesRemoved") >= 12) {
+                                        isWinner = false;
+                                        playerOneCumulativeScore = documentChange.getDocument().getLong("gameSessionPlayerScores.player1Elimination");
+                                        playerTwoCumulativeScore = documentChange.getDocument().getLong("gameSessionPlayerScores.player2Elimination");
+                                        gameSessionView.updateTurn(false);
+                                    } else {
+                                        gameSessionView.updateTurn(false);
+                                    }
+                                }
+                                if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("hostTerminate"))) {
+                                    gameSessionView.informDecisionMade(true, false);
+                                } else if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("oppLeft"))) {
+                                    gameSessionView.informDecisionMade(false, true);
                                 }
                                 break;
                             case REMOVED:
@@ -186,11 +231,29 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
                                 break;
                             case MODIFIED:
                                 if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerTwoTurn"))) {
-                                    gameSessionView.reflect(documentChange.getDocument().getLong("gameSessionPlayerMoves.Player1Reflected"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player1Prev"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player2Eliminated"), true);
-                                    gameSessionView.updateTurn(true);
+                                    if (documentChange.getDocument().getLong("eliminatedPiecesCount.player1PiecesRemoved") >= 12) {
+                                        isWinner = true;
+                                        gameSessionView.updateTurn(true);
+                                        playerOneCumulativeScore = documentChange.getDocument().getLong("gameSessionPlayerScores.player1Elimination");
+                                        playerTwoCumulativeScore = documentChange.getDocument().getLong("gameSessionPlayerScores.player2Elimination");
+                                    } else {
+                                        gameSessionView.reflect(documentChange.getDocument().getLong("gameSessionPlayerMoves.Player1Reflected"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player1Prev"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player2Eliminated"), true);
+                                        gameSessionView.updateTurn(true);
+                                    }
                                 } else if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerOneTurn"))) {
-                                    gameSessionView.updateTurn(false);
-                                    isDisabledForP2 = true;
+                                    if (documentChange.getDocument().getLong("eliminatedPiecesCount.player2PiecesRemoved") >= 12) {
+                                        isWinner = false;
+                                        playerTwoCumulativeScore = documentChange.getDocument().getLong("gameSessionPlayerScores.player2Elimination");
+                                        playerOneCumulativeScore = documentChange.getDocument().getLong("gameSessionPlayerScores.player1Elimination");
+                                        gameSessionView.updateTurn(false);
+                                    } else {
+                                        gameSessionView.updateTurn(false);
+                                    }
+                                }
+                                if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("hostTerminate"))) {
+                                    gameSessionView.informDecisionMade(true, false);
+                                } else if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("oppLeft"))) {
+                                    gameSessionView.informDecisionMade(false, true);
                                 }
                                 break;
                             case REMOVED:
@@ -202,9 +265,44 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
         }
     }
 
-    @Override
-    public void recordScore() {
+    public void updateTerminate(boolean decision) {
+        if (decision) {
+            updateOnTerminate();
+        }
+    }
 
+    public void updateLeave(boolean decision) {
+        if (decision) {
+            updateOnLeave();
+        }
+    }
+
+    @Override
+    public void gameEnded(String winningPlayerId, String losingPlayerId,long winningPlayerScore, long losingPlayerScore) {
+        constants.getFirebaseFirestore().collection("Player").document(GameSessionActivity.hostIdPass).collection("GameSession").document(GameSessionActivity.sessionIdPass).update("gameEnded", true, "gameEndTime", FieldValue.serverTimestamp()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+
+                }
+            }
+        });
+        constants.getFirebaseFirestore().collection("Player").document(winningPlayerId).update("playerWins", FieldValue.increment(1),"playerCumScore", FieldValue.increment(winningPlayerScore), "matchesPlayed", FieldValue.increment(1)).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+
+                }
+            }
+        });
+        constants.getFirebaseFirestore().collection("Player").document(losingPlayerId).update("playerLosses", FieldValue.increment(1),"playerCumScore", FieldValue.increment(losingPlayerScore), "matchesPlayed", FieldValue.increment(1)).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+
+                }
+            }
+        });
     }
 
 
@@ -214,5 +312,7 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
         void updateTurn(boolean isTurn);
 
         void reflect(long reflect, long prev, long eliminated, boolean isPlayerOne);
+
+        void informDecisionMade(boolean byHost, boolean byOpp);
     }
 }

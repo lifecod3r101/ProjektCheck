@@ -31,6 +31,7 @@ public class GameSessionRequestPresenter implements CheckerInterfaceHolder.GameS
     private DocumentSnapshot lastSnap;
     private ListenerRegistration registration;
 
+
     public GameSessionRequestPresenter() {
     }
 
@@ -45,9 +46,9 @@ public class GameSessionRequestPresenter implements CheckerInterfaceHolder.GameS
     public void showAvailableSessions() {
         Query query = null;
         if (lastSnap != null) {
-            query = constants.getFirebaseFirestore().collectionGroup("GameSession").whereEqualTo("playerFound", false).startAfter(lastSnap);
+            query = constants.getFirebaseFirestore().collectionGroup("GameSession").whereEqualTo("playerFound", false).whereEqualTo("gameEnded",false).whereEqualTo("hostTerminate",false).whereNotEqualTo("playerHostId", Constants.getFirebaseAuth().getCurrentUser().getUid()).startAfter(lastSnap);
         } else {
-            query = constants.getFirebaseFirestore().collectionGroup("GameSession").whereEqualTo("playerFound", false);
+            query = constants.getFirebaseFirestore().collectionGroup("GameSession").whereEqualTo("playerFound", false).whereEqualTo("gameEnded",false).whereEqualTo("hostTerminate",false).whereNotEqualTo("playerHostId", Constants.getFirebaseAuth().getCurrentUser().getUid());
         }
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -61,7 +62,6 @@ public class GameSessionRequestPresenter implements CheckerInterfaceHolder.GameS
                             playersView.getSessionsAvailable(gameSession, false);
                         }
                     }
-
                     if (task.getResult().size() != 0) {
                         lastSnap = task.getResult().getDocuments().get(task.getResult().size() - 1);
                     }
@@ -88,7 +88,6 @@ public class GameSessionRequestPresenter implements CheckerInterfaceHolder.GameS
                                 playersView.getPlaying();
                                 registration.remove();
                             }
-
                             break;
                         case REMOVED:
                             break;
@@ -100,7 +99,7 @@ public class GameSessionRequestPresenter implements CheckerInterfaceHolder.GameS
     }
 
     @Override
-    public void requestToPlaySession(String hostPlayerId, String joiningPlayerId, String gameSessionId) {
+    public void requestToPlaySession(String hostPlayerId, String joiningPlayerId, String joiningPlayerUserName, String gameSessionId) {
         DocumentReference hostPlayerRef = constants.getFirebaseFirestore().collection("Player").document(hostPlayerId);
         DocumentReference playerRequestingRef = constants.getFirebaseFirestore().collection("Player").document(joiningPlayerId);
         DocumentReference hostPlayerGameRef = constants.getFirebaseFirestore().collection("Player").document(hostPlayerId).collection("GameSession").document(gameSessionId);
@@ -118,17 +117,15 @@ public class GameSessionRequestPresenter implements CheckerInterfaceHolder.GameS
 
             }
         });
-        hostPlayerGameRef.update("gameSessionPlayers.Player2", joiningPlayerId, "playerFound", true, "playerOneColour", "White", "playerTwoColour", "Yellow", "gameStartTime", FieldValue.serverTimestamp(), "gameSessionPlayers.Player2", joiningPlayerId, "playerOneTurn", true, "playerTwoTurn", false).addOnCompleteListener(new OnCompleteListener<Void>() {
+        hostPlayerGameRef.update("gameSessionPlayers.Player2", joiningPlayerId, "gameSessionPlayers.Player2UserName", joiningPlayerUserName, "playerFound", true, "playerOneColour", "White", "playerTwoColour", "Yellow", "gameStartTime", FieldValue.serverTimestamp(), "gameSessionPlayers.Player2", joiningPlayerId, "playerOneTurn", true, "playerTwoTurn", false, "hostTerminate", false, "oppLeft", false).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    //playersView.getPlaying();
 
                 }
             }
         });
         listenForUpdate(hostPlayerId, joiningPlayerId, gameSessionId);
-
     }
 
 
@@ -151,10 +148,6 @@ public class GameSessionRequestPresenter implements CheckerInterfaceHolder.GameS
 
     public interface PlayersView {
         void getSessionsAvailable(GameSession gameSession, boolean isNotAvailable);
-
-        void getPlayerFound();
-
-        void getColourUpdate(String colour);
 
         void getPlaying();
     }

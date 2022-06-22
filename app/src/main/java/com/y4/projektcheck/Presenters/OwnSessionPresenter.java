@@ -47,16 +47,14 @@ public class OwnSessionPresenter implements CheckerInterfaceHolder.OwnSessionOpe
     public void showOwnSession() {
         if (Constants.getFirebaseAuth().getCurrentUser() != null) {
             Query query = constants.getFirebaseFirestore().collection("Player").document(Constants.getFirebaseAuth().getCurrentUser().getUid()).collection("GameSession");
-            query.whereEqualTo("gameSessionPlayers.Player1", Constants.getFirebaseAuth().getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            query.whereEqualTo("gameSessionPlayers.Player1", Constants.getFirebaseAuth().getCurrentUser().getUid()).whereEqualTo("hostTerminate",false).whereEqualTo("playerFound",false).whereEqualTo("gameEnded", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot snapshot : task.getResult()) {
                             GameSession gameSession = snapshot.toObject(GameSession.class);
                             ownSessionView.ownSessionInfo(gameSession);
-
                         }
-
                     }
                 }
             });
@@ -79,7 +77,7 @@ public class OwnSessionPresenter implements CheckerInterfaceHolder.OwnSessionOpe
                             break;
                         case MODIFIED:
                             if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerFound"))) {
-                                ownSessionView.getPlaying();
+                                ownSessionView.getPlaying(documentChange.getDocument().getString("gameSessionPlayers.Player2UserName"));
                                 registration.remove();
                             }
                             break;
@@ -95,8 +93,6 @@ public class OwnSessionPresenter implements CheckerInterfaceHolder.OwnSessionOpe
     public interface OwnSessionView {
         void ownSessionInfo(GameSession gameSession);
 
-        void showUpdates(String requestingPlayerId);
-
-        void getPlaying();
+        void getPlaying(String playerUserName);
     }
 }

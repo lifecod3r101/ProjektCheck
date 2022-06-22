@@ -8,16 +8,30 @@
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/drawable/ic_checker_king_2.xml" value="0.133" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/drawable/ic_rpiece.xml" value="0.1855" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/drawable/ic_user.xml" value="0.1465" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-land/player_requests_layout.xml" value="0.1" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw320dp/activity_main.xml" value="0.1140625" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw320dp/checker_piece_layout.xml" value="0.1" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw320dp/game_session_layout.xml" value="0.136" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw320dp/player_requests_layout.xml" value="0.1140625" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw320dp/player_sign_up_layout.xml" value="0.136" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw480dp/activity_main.xml" value="0.10693359375" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw480dp/checker_piece_layout.xml" value="0.1" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw480dp/game_session_layout.xml" value="0.1" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw480dp/player_requests_layout.xml" value="0.10693359375" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw480dp/player_sign_up_layout.xml" value="0.18920765027322403" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw600dp/activity_main.xml" value="0.10693359375" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw600dp/checker_piece_layout.xml" value="0.1" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw600dp/game_session_layout.xml" value="0.136" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw600dp/player_requests_layout.xml" value="0.10693359375" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw600dp/player_requests_layout_1.xml" value="0.1044921875" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw600dp/player_requests_layout_2.xml" value="0.1044921875" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw600dp/player_sign_up_layout.xml" value="0.1" />
-        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw720dp/game_session_layout.xml" value="0.1" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw720dp/activity_main.xml" value="0.10693359375" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw720dp/checker_piece_layout.xml" value="0.1" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw720dp/game_session_layout.xml" value="0.12" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw720dp/player_requests_layout.xml" value="0.10693359375" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw720dp/player_sign_up_layout.xml" value="0.1" />
+        <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout-sw720dp/splash_screen_layout.xml" value="0.10693359375" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/activity_main.xml" value="0.136" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/checker_piece_layout.xml" value="0.136" />
         <entry key="..\:/Users/speed/Projekts/check/app/src/main/res/layout/game_session_layout.xml" value="0.12" />
@@ -44,7 +58,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.12" />
+        <option name="scale" value="0.1" />
       </ProjectState>
     </option>
   </component>

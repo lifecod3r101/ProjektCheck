@@ -23,6 +23,7 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuPrese
     private MainMenuPresenter mainMenuPresenter;
     private Player player;
     private String intentionSession, sessionId;
+    private String playerUserName;
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
@@ -41,9 +42,9 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuPrese
         createSession = findViewById(R.id.create_game);
         joinSession = findViewById(R.id.join_game);
         mainMenuPresenter = new MainMenuPresenter(MainMenuActivity.this, Constants.getFirebaseAuth().getCurrentUser());
-        if (getIntent().hasExtra("intention")) {
+        if (getIntent().hasExtra("intention") && getIntent().hasExtra("playerUserName")) {
             intentionSession = getIntent().getStringExtra("intention");
-            mainMenuPresenter.createSession(Constants.getFirebaseAuth().getCurrentUser().getUid());
+            mainMenuPresenter.createSession(Constants.getFirebaseAuth().getCurrentUser().getUid(), getIntent().getStringExtra("playerUserName"));
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainMenuActivity.this);
             alertDialog.setMessage("Prove yourself worthy of a challenge!");
             alertDialog.setNeutralButton("For sure!", new DialogInterface.OnClickListener() {
@@ -117,6 +118,7 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuPrese
         if (player != null) {
             profileImg.setBackgroundResource(R.color.white);
             this.player = player;
+            playerUserName = player.getPlayerUserName();
             setPassPlayer(player);
             passPlayerInfo();
         } else {
@@ -165,7 +167,7 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuPrese
             if (mainMenuPresenter.isSessionExists()) {
                 Toast.makeText(MainMenuActivity.this, "Sorry. You have a session that exists.", Toast.LENGTH_SHORT).show();
             } else {
-                mainMenuPresenter.createSession(firebaseUser.getUid());
+                mainMenuPresenter.createSession(firebaseUser.getUid(), player.getPlayerUserName());
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainMenuActivity.this);
                 alertDialog.setMessage("Prove yourself worthy of a challenge!");
                 alertDialog.setNeutralButton("For sure!", new DialogInterface.OnClickListener() {
@@ -178,7 +180,8 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuPrese
                 dialog.show();
             }
         } else if (action.equals("joinSession")) {
-            startActivity(new Intent(MainMenuActivity.this, GameSessionRequestActivity.class));
+            startActivity(new Intent(MainMenuActivity.this, GameSessionRequestActivity.class)
+                    .putExtra("joinPlayerUserName", playerUserName));
         }
     }
 }

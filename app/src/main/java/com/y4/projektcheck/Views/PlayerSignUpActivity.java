@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -79,7 +80,7 @@ public class PlayerSignUpActivity extends AppCompatActivity implements PlayerSig
     }
 
     @Override
-    public void checkUserNameTaken(boolean snapshotExists) {
+    public void checkUserNameTaken(boolean snapshotExists,String playerUserName) {
         if (snapshotExists) {
             userNameEditText.setError("Sorry. This username has been taken.");
             userNameEditText.requestFocus();
@@ -88,7 +89,8 @@ public class PlayerSignUpActivity extends AppCompatActivity implements PlayerSig
                 startActivity(new Intent(PlayerSignUpActivity.this, UserProfileActivity.class));
                 finish();
             } else if (extraActionGet.equals("sessionMine")) {
-                startActivity(new Intent(PlayerSignUpActivity.this, MainMenuActivity.class).putExtra("intention", extraActionGet));
+                startActivity(new Intent(PlayerSignUpActivity.this, MainMenuActivity.class).putExtra("intention", extraActionGet)
+                        .putExtra("playerUserName",playerUserName));
                 finish();
                 Toast.makeText(PlayerSignUpActivity.this, "Please proceed to create your session!", Toast.LENGTH_SHORT).show();
             } else if (extraActionGet.equals("sessionOther")) {
@@ -99,7 +101,6 @@ public class PlayerSignUpActivity extends AppCompatActivity implements PlayerSig
                 finish();
                 Toast.makeText(PlayerSignUpActivity.this, "Welcome to the club!", Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 
@@ -111,6 +112,5 @@ public class PlayerSignUpActivity extends AppCompatActivity implements PlayerSig
         } else {
 
         }
-
     }
 }

@@ -54,6 +54,7 @@
         </activity>
         <activity android:name="com.y4.projektcheck.Views.UserProfileActivity" />
         <activity android:name="com.y4.projektcheck.Views.OwnSessionActivity" />
+        <activity android:name="com.y4.projektcheck.Views.TestActivity" android:exported="true"/>
     </application>
 
 </manifest>

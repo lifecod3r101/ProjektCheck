@@ -17,6 +17,8 @@ import com.y4.projektcheck.Misc.Constants;
 import com.y4.projektcheck.Models.Player;
 import com.y4.projektcheck.Models.UserName;
 
+import java.util.Objects;
+
 public class PlayerSignUpPresenter implements CheckerInterfaceHolder.RecogniseUser, CheckerInterfaceHolder.GetUserInfoViewOperations {
     private Player player;
     private SignUpProcessView signUpProcessView;
@@ -80,7 +82,17 @@ public class PlayerSignUpPresenter implements CheckerInterfaceHolder.RecogniseUs
         constants.getFirebaseFirestore().collection("Player").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                signUpProcessView.checkPlayerExists(task.getResult().exists());
+                if (task.isSuccessful()) {
+                    DocumentSnapshot snapshot = task.getResult();
+                    if (snapshot.exists()) {
+                        String userName = snapshot.getString("playerUserName");
+                        if (!Objects.requireNonNull(userName).isEmpty()) {
+                            signUpProcessView.checkPlayerExists(task.getResult().exists());
+                        } else {
+
+                        }
+                    }
+                }
             }
         });
     }
@@ -118,9 +130,9 @@ public class PlayerSignUpPresenter implements CheckerInterfaceHolder.RecogniseUs
                 if (task.isSuccessful()) {
                     DocumentSnapshot snapshot = task.getResult();
                     if (snapshot.exists()) {
-                        signUpProcessView.checkUserNameTaken(true);
+                        signUpProcessView.checkUserNameTaken(true, playerUserName);
                     } else {
-                        signUpProcessView.checkUserNameTaken(false);
+                        signUpProcessView.checkUserNameTaken(false, playerUserName);
                         constants.getFirebaseFirestore().collection("Player").document(Constants.getFirebaseAuth().getCurrentUser().getUid()).update("available", true, "playerUserName", playerUserName).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -146,7 +158,7 @@ public class PlayerSignUpPresenter implements CheckerInterfaceHolder.RecogniseUs
     public interface SignUpProcessView {
         void checkUserNameEmpty(String playerUserName);
 
-        void checkUserNameTaken(boolean snapshotExists);
+        void checkUserNameTaken(boolean snapshotExists, String userName);
 
         void checkPlayerExists(boolean exists);
     }
