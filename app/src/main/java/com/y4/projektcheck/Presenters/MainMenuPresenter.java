@@ -25,7 +25,15 @@ public class MainMenuPresenter implements CheckerInterfaceHolder.MainMenuOperati
     private MainMenuView mainMenuView;
     private MainMenuActivity mainMenuActivity = new MainMenuActivity();
     private boolean sessionExists;
+    private String currSessId;
 
+    public String getCurrSessId() {
+        return currSessId;
+    }
+
+    public void setCurrSessId(String currSessId) {
+        this.currSessId = currSessId;
+    }
 
     public boolean isSessionExists() {
         return sessionExists;
@@ -79,6 +87,7 @@ public class MainMenuPresenter implements CheckerInterfaceHolder.MainMenuOperati
                         for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                             if (documentSnapshot.exists()) {
                                 setSessionExists(true);
+                                setCurrSessId(documentSnapshot.getString("currSessionId"));
                             } else {
                                 setSessionExists(false);
                             }
@@ -123,6 +132,8 @@ public class MainMenuPresenter implements CheckerInterfaceHolder.MainMenuOperati
         gameSession.setGameEnded(false);
         String sessionId = constants.getFirebaseFirestore().collection("Player").document(hostPlayerId).collection("GameSession").document().getId();
         gameSession.setGameSessionId(sessionId);
+        gameSession.setCurrSessionId(sessionId);
+        setCurrSessId(sessionId);
         constants.getFirebaseFirestore().collection("Player").document(hostPlayerId).collection("GameSession").document(sessionId).set(gameSession).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

@@ -3,6 +3,7 @@ package com.y4.projektcheck.Views;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +20,8 @@ public class OwnSessionActivity extends AppCompatActivity implements OwnSessionP
     private GameSessionRequestPresenter presenter;
     private boolean isYellowSelected = false;
     private boolean isWhiteSelected = false;
-    private String sessionId, hostPlayer, oppPlayer,hostPlayerId, oppPlayerId, sessionIdPass;
+    private String sessionId, hostPlayer, oppPlayer,hostPlayerId, oppPlayerId;
+    public static String sessionIdPass;
     private SharedPreferences sessionIdPref;
 
     @Override
@@ -32,7 +34,7 @@ public class OwnSessionActivity extends AppCompatActivity implements OwnSessionP
         if (getIntent().hasExtra("sessionId")) {
             sessionIdPass = getIntent().getStringExtra("sessionId");
         }
-        ownSessionPresenter = new OwnSessionPresenter(OwnSessionActivity.this);
+        ownSessionPresenter = new OwnSessionPresenter(OwnSessionActivity.this,sessionIdPass);
         presenter = new GameSessionRequestPresenter();
     }
 
@@ -72,6 +74,7 @@ public class OwnSessionActivity extends AppCompatActivity implements OwnSessionP
         hostPlayerText.setText("Player 1: ".concat(hostPlayer));
         oppPlayerText.setText("Player 2: ".concat(oppPlayer));
         ownSessionPresenter.setSessionId(gameSession.getGameSessionId());
+
     }
 
     @Override

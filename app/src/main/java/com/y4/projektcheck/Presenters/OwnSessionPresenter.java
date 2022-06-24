@@ -1,5 +1,7 @@
 package com.y4.projektcheck.Presenters;
 
+import static com.y4.projektcheck.Views.OwnSessionActivity.sessionIdPass;
+
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -37,17 +39,16 @@ public class OwnSessionPresenter implements CheckerInterfaceHolder.OwnSessionOpe
 
     }
 
-    public OwnSessionPresenter(OwnSessionView ownSessionView) {
+    public OwnSessionPresenter(OwnSessionView ownSessionView, String ownSessionId) {
         this.ownSessionView = ownSessionView;
-        showOwnSession();
-
+        showOwnSession(sessionIdPass);
     }
 
     @Override
-    public void showOwnSession() {
+    public void showOwnSession(String ownSessionId) {
         if (Constants.getFirebaseAuth().getCurrentUser() != null) {
             Query query = constants.getFirebaseFirestore().collection("Player").document(Constants.getFirebaseAuth().getCurrentUser().getUid()).collection("GameSession");
-            query.whereEqualTo("gameSessionPlayers.Player1", Constants.getFirebaseAuth().getCurrentUser().getUid()).whereEqualTo("hostTerminate",false).whereEqualTo("playerFound",false).whereEqualTo("gameEnded", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            query.whereEqualTo("currSessionId", ownSessionId).whereEqualTo("hostTerminate", false).whereEqualTo("playerFound", false).whereEqualTo("gameEnded", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
@@ -65,7 +66,7 @@ public class OwnSessionPresenter implements CheckerInterfaceHolder.OwnSessionOpe
     @Override
     public void listenForUpdate() {
         Query query = constants.getFirebaseFirestore().collection("Player").document(Constants.getFirebaseAuth().getCurrentUser().getUid()).collection("GameSession");
-        registration = query.whereEqualTo("gameSessionPlayers.Player1", Constants.getFirebaseAuth().getCurrentUser().getUid()).addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
+        registration = query.whereEqualTo("currSessionId", sessionIdPass).addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
@@ -87,7 +88,6 @@ public class OwnSessionPresenter implements CheckerInterfaceHolder.OwnSessionOpe
                 }
             }
         });
-
     }
 
     public interface OwnSessionView {

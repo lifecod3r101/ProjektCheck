@@ -12,6 +12,8 @@ public class GameSession {
     @DocumentId
     private String gameSessionId;
 
+    private String currSessionId;
+
     private Map<String, Object> gameSessionPlayers = new HashMap<>();
     private Map<String, Integer> gameSessionPlayerMoves = new HashMap<>();
     private Map<String, Integer> gameSessionPlayerScores = new HashMap<>();
@@ -24,7 +26,8 @@ public class GameSession {
     public GameSession() {
     }
 
-    public GameSession(Date gameStartTime, Date gameEndTime, String gameSessionId, Map<String, Object> gameSessionPlayers, Map<String, Integer> gameSessionPlayerScores, Map<String, Integer> gameSessionPlayerMoves, Boolean playerFound, String playerOneColour, String playerTwoColour, Boolean playerOneTurn, Boolean playerTwoTurn, String playerHostId, Map<String, Integer> eliminatedPiecesCount, boolean hostTerminate, boolean oppLeft, boolean gameEnded) {
+    public GameSession(String currSessionId,Date gameStartTime, Date gameEndTime, String gameSessionId, Map<String, Object> gameSessionPlayers, Map<String, Integer> gameSessionPlayerScores, Map<String, Integer> gameSessionPlayerMoves, Boolean playerFound, String playerOneColour, String playerTwoColour, Boolean playerOneTurn, Boolean playerTwoTurn, String playerHostId, Map<String, Integer> eliminatedPiecesCount, boolean hostTerminate, boolean oppLeft, boolean gameEnded) {
+        this.currSessionId=currSessionId;
         this.gameStartTime = gameStartTime;
         this.gameEndTime = gameEndTime;
         this.gameSessionId = gameSessionId;
@@ -41,6 +44,14 @@ public class GameSession {
         this.hostTerminate = hostTerminate;
         this.oppLeft = oppLeft;
         this.gameEnded = gameEnded;
+    }
+
+    public String getCurrSessionId() {
+        return currSessionId;
+    }
+
+    public void setCurrSessionId(String currSessionId) {
+        this.currSessionId = currSessionId;
     }
 
     public boolean isGameEnded() {

@@ -1,6 +1,8 @@
 package com.y4.projektcheck.Presenters;
 
+import static com.y4.projektcheck.Views.GameSessionActivity.hostIdPass;
 import static com.y4.projektcheck.Views.GameSessionActivity.isWinner;
+import static com.y4.projektcheck.Views.GameSessionActivity.oppIdPass;
 import static com.y4.projektcheck.Views.GameSessionActivity.playerOneCumulativeScore;
 import static com.y4.projektcheck.Views.GameSessionActivity.playerTwoCumulativeScore;
 
@@ -81,7 +83,7 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
 
     @Override
     public void showGameSessionInfo(String gameSessionId) {
-        constants.getFirebaseFirestore().collectionGroup("GameSession").whereEqualTo("gameSessionPlayers.Player1", hostId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        constants.getFirebaseFirestore().collectionGroup("GameSession").whereEqualTo("currSessionId", gameSessionId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -117,11 +119,43 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
                 }
             }
         });
+        constants.getFirebaseFirestore().collection("Player").document(hostIdPass).update("available", true, "inSession", false).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+
+                }
+            }
+        });
+        constants.getFirebaseFirestore().collection("Player").document(oppIdPass).update("available", true, "inSession", false).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+
+                }
+            }
+        });
     }
 
     @Override
     public void updateOnLeave() {
         constants.getFirebaseFirestore().collection("Player").document(GameSessionActivity.hostIdPass).collection("GameSession").document(GameSessionActivity.sessionIdPass).update("oppLeft", true, "gameSessionPlayers.Player2", "", "gameSessionPlayers.Player2UserName", "", "playerFound", false, "playerOneTurn", false, "playerTwoTurn", false).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+
+                }
+            }
+        });
+        constants.getFirebaseFirestore().collection("Player").document(hostIdPass).update("available", true, "inSession", false).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+
+                }
+            }
+        });
+        constants.getFirebaseFirestore().collection("Player").document(oppIdPass).update("available", true, "inSession", false).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -172,7 +206,7 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
     public void listenForMoves(String gameSessionId) {
         if (GameSessionActivity.otherIntent.hasExtra("playerOne")) {
             Query gameSessionQry = constants.getFirebaseFirestore().collection("Player").document(getHostId()).collection("GameSession");
-            listenerRegistration = gameSessionQry.whereEqualTo("gameSessionPlayers.Player1", getHostId()).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            listenerRegistration = gameSessionQry.whereEqualTo("currSessionId", gameSessionId).addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                     if (error != null) {
@@ -185,21 +219,23 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
                                 break;
                             case MODIFIED:
                                 if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerOneTurn"))) {
-                                    if (documentChange.getDocument().getLong("eliminatedPiecesCount.player2PiecesRemoved") >= 12) {
+                                    if (documentChange.getDocument().getLong("eliminatedPiecesCount.player1PiecesRemoved") == 12) {
                                         isWinner = true;
                                         playerOneCumulativeScore = documentChange.getDocument().getLong("gameSessionPlayerScores.player1Elimination");
                                         playerTwoCumulativeScore = documentChange.getDocument().getLong("gameSessionPlayerScores.player2Elimination");
-                                        gameSessionView.updateTurn(true);
+                                        gameSessionView.updateVictory(false, playerTwoCumulativeScore, playerOneCumulativeScore, documentChange.getDocument().getString("gameSessionPlayers.Player2"), documentChange.getDocument().getString("gameSessionPlayers.Player1"));
+                                        listenerRegistration.remove();
                                     } else {
                                         gameSessionView.reflect(documentChange.getDocument().getLong("gameSessionPlayerMoves.Player2Reflected"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player2Prev"), documentChange.getDocument().getLong("gameSessionPlayerMoves.Player1Eliminated"), false);
                                         gameSessionView.updateTurn(true);
                                     }
                                 } else if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerTwoTurn"))) {
-                                    if (documentChange.getDocument().getLong("eliminatedPiecesCount.player1PiecesRemoved") >= 12) {
+                                    if (documentChange.getDocument().getLong("eliminatedPiecesCount.player2PiecesRemoved") == 12) {
                                         isWinner = false;
                                         playerOneCumulativeScore = documentChange.getDocument().getLong("gameSessionPlayerScores.player1Elimination");
                                         playerTwoCumulativeScore = documentChange.getDocument().getLong("gameSessionPlayerScores.player2Elimination");
-                                        gameSessionView.updateTurn(false);
+                                        gameSessionView.updateVictory(true, playerOneCumulativeScore, playerTwoCumulativeScore, documentChange.getDocument().getString("gameSessionPlayers.Player1"), documentChange.getDocument().getString("gameSessionPlayers.Player2"));
+                                        listenerRegistration.remove();
                                     } else {
                                         gameSessionView.updateTurn(false);
                                     }
@@ -218,7 +254,7 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
             });
         } else if (GameSessionActivity.otherIntent.hasExtra("playerTwo")) {
             Query gameSessionQry = constants.getFirebaseFirestore().collection("Player").document(hostId).collection("GameSession");
-            listenerRegistration = gameSessionQry.whereEqualTo("gameSessionPlayers.Player1", hostId).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            listenerRegistration = gameSessionQry.whereEqualTo("currSessionId", gameSessionId).addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                     if (error != null) {
@@ -231,9 +267,10 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
                                 break;
                             case MODIFIED:
                                 if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerTwoTurn"))) {
-                                    if (documentChange.getDocument().getLong("eliminatedPiecesCount.player1PiecesRemoved") >= 12) {
+                                    if (documentChange.getDocument().getLong("eliminatedPiecesCount.player2PiecesRemoved") == 12) {
                                         isWinner = true;
-                                        gameSessionView.updateTurn(true);
+                                        listenerRegistration.remove();
+                                        gameSessionView.updateVictory(false, playerOneCumulativeScore, playerTwoCumulativeScore, documentChange.getDocument().getString("gameSessionPlayers.Player1"), documentChange.getDocument().getString("gameSessionPlayers.Player2"));
                                         playerOneCumulativeScore = documentChange.getDocument().getLong("gameSessionPlayerScores.player1Elimination");
                                         playerTwoCumulativeScore = documentChange.getDocument().getLong("gameSessionPlayerScores.player2Elimination");
                                     } else {
@@ -241,11 +278,12 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
                                         gameSessionView.updateTurn(true);
                                     }
                                 } else if (Boolean.TRUE.equals(documentChange.getDocument().getBoolean("playerOneTurn"))) {
-                                    if (documentChange.getDocument().getLong("eliminatedPiecesCount.player2PiecesRemoved") >= 12) {
+                                    if (documentChange.getDocument().getLong("eliminatedPiecesCount.player1PiecesRemoved") == 12) {
                                         isWinner = false;
                                         playerTwoCumulativeScore = documentChange.getDocument().getLong("gameSessionPlayerScores.player2Elimination");
                                         playerOneCumulativeScore = documentChange.getDocument().getLong("gameSessionPlayerScores.player1Elimination");
-                                        gameSessionView.updateTurn(false);
+                                        gameSessionView.updateVictory(true, playerTwoCumulativeScore, playerOneCumulativeScore, documentChange.getDocument().getString("gameSessionPlayers.Player2"), documentChange.getDocument().getString("gameSessionPlayers.Player1"));
+                                        listenerRegistration.remove();
                                     } else {
                                         gameSessionView.updateTurn(false);
                                     }
@@ -278,7 +316,7 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
     }
 
     @Override
-    public void gameEnded(String winningPlayerId, String losingPlayerId,long winningPlayerScore, long losingPlayerScore) {
+    public void gameEnded(String winningPlayerId, String losingPlayerId, long winningPlayerScore, long losingPlayerScore) {
         constants.getFirebaseFirestore().collection("Player").document(GameSessionActivity.hostIdPass).collection("GameSession").document(GameSessionActivity.sessionIdPass).update("gameEnded", true, "gameEndTime", FieldValue.serverTimestamp()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -287,7 +325,7 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
                 }
             }
         });
-        constants.getFirebaseFirestore().collection("Player").document(winningPlayerId).update("playerWins", FieldValue.increment(1),"playerCumScore", FieldValue.increment(winningPlayerScore), "matchesPlayed", FieldValue.increment(1)).addOnCompleteListener(new OnCompleteListener<Void>() {
+        constants.getFirebaseFirestore().collection("Player").document(winningPlayerId).update("playerWins", FieldValue.increment(1), "playerCumScore", FieldValue.increment(winningPlayerScore), "matchesPlayed", FieldValue.increment(1)).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -295,7 +333,7 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
                 }
             }
         });
-        constants.getFirebaseFirestore().collection("Player").document(losingPlayerId).update("playerLosses", FieldValue.increment(1),"playerCumScore", FieldValue.increment(losingPlayerScore), "matchesPlayed", FieldValue.increment(1)).addOnCompleteListener(new OnCompleteListener<Void>() {
+        constants.getFirebaseFirestore().collection("Player").document(losingPlayerId).update("playerLosses", FieldValue.increment(1), "playerCumScore", FieldValue.increment(losingPlayerScore), "matchesPlayed", FieldValue.increment(1)).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -310,6 +348,8 @@ public class GameSessionPresenter implements CheckerInterfaceHolder.GameSessionO
         void gameSessionInfo(GameSession gameSession);
 
         void updateTurn(boolean isTurn);
+
+        void updateVictory(boolean hasWon, long winningPlayerScore, long losingPlayerScore, String winningPlayerId, String losingPlayerId);
 
         void reflect(long reflect, long prev, long eliminated, boolean isPlayerOne);
 

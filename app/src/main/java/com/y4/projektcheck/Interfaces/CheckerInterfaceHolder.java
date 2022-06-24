@@ -25,7 +25,7 @@ public interface CheckerInterfaceHolder {
     }
 
     interface OwnSessionOperations {
-        void showOwnSession();
+        void showOwnSession(String ownSessionId);
 
         void listenForUpdate();
     }

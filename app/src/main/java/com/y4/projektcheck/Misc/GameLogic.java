@@ -1,7 +1,6 @@
 package com.y4.projektcheck.Misc;
 
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ImageButton;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -163,23 +162,32 @@ public class GameLogic {
         spacesAvailableList.add(35);
         spacesAvailableList.add(37);
         spacesAvailableList.add(39);
+
         if (colourChosen.equals("White")) {
             buttonPieceWhite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setHasPieceBeenClicked(true);
-                    setSpacesAvailable(true);
-                    setPieceClicked((Integer) v.getTag(), v);
-                    setReflectedPieceClicked(reflectPosition((Integer) v.getTag()));
+                    if (isHasKingPieceBeenClicked()) {
+                        setHasKingPieceBeenClicked(false);
+                    } else {
+                        setHasPieceBeenClicked(true);
+                        setSpacesAvailable(true);
+                        setPieceClicked((Integer) v.getTag(), v);
+                        setReflectedPieceClicked(reflectPosition((Integer) v.getTag()));
+                    }
                 }
             });
             buttonKingWhite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setHasKingPieceBeenClicked(true);
-                    setSpacesAvailable(true);
-                    setKingPieceClicked((Integer) v.getTag(), v);
-                    setReflectedKingPieceClicked(reflectPosition((Integer) v.getTag()));
+                    if (isHasPieceBeenClicked()) {
+                        setHasPieceBeenClicked(false);
+                    } else {
+                        setHasKingPieceBeenClicked(true);
+                        setSpacesAvailable(true);
+                        setKingPieceClicked((Integer) v.getTag(), v);
+                        setReflectedKingPieceClicked(reflectPosition((Integer) v.getTag()));
+                    }
                 }
             });
             imageView.setOnClickListener(new View.OnClickListener() {
@@ -203,12 +211,6 @@ public class GameLogic {
                             boolean spaceClickedKingPlusEght = (Integer) v.getTag() == (Integer) getKingPieceClicked().getTag() + 18;
                             boolean spaceFilled = gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_man_1).getVisibility() == View.VISIBLE || gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_1).getVisibility() == View.VISIBLE;
                             boolean spaceFilledByOwn = gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_man_2).getVisibility() == View.VISIBLE || gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).getVisibility() == View.VISIBLE;
-                            boolean notVisibleFort = gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_man_1).getVisibility() == View.INVISIBLE || gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_king_1).getVisibility() == View.INVISIBLE;
-                            boolean notVisibleEght = gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_man_1).getVisibility() == View.INVISIBLE || gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_king_1).getVisibility() == View.INVISIBLE;
-                            boolean visibleFort = gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_man_1).getVisibility() == View.VISIBLE || gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_king_1).getVisibility() == View.VISIBLE;
-                            boolean visibleEght = gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_man_1).getVisibility() == View.VISIBLE || gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_king_1).getVisibility() == View.VISIBLE;
-                            boolean kingVisibleFort = gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_king_1).getVisibility() == View.VISIBLE;
-                            boolean kingVisibleEght = gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_king_1).getVisibility() == View.VISIBLE;
                             if (isHasKingPieceBeenClicked()) {
                                 if (spacesAvailableList.contains((Integer) v.getTag()) || spacesAvailableList.contains(reflectPosition((Integer) v.getTag()))) {
                                     if (spaceClickedKingPlusSev) {
@@ -218,7 +220,6 @@ public class GameLogic {
                                             getKingPieceClicked().setVisibility(View.INVISIBLE);
                                             spacesAvailableList.remove((Integer) v.getTag());
                                             spacesAvailableList.add((Integer) getKingPieceClicked().getTag());
-//                                            buttonKingWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                             gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).setVisibility(View.VISIBLE);
                                             presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, (Integer) getKingPieceClicked().getTag());
                                             setHasKingPieceBeenClicked(false);
@@ -230,7 +231,6 @@ public class GameLogic {
                                             getKingPieceClicked().setVisibility(View.INVISIBLE);
                                             spacesAvailableList.remove((Integer) v.getTag());
                                             spacesAvailableList.add((Integer) getKingPieceClicked().getTag());
-//                                            buttonKingWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                             gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).setVisibility(View.VISIBLE);
                                             presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, (Integer) getKingPieceClicked().getTag());
                                             setHasKingPieceBeenClicked(false);
@@ -242,7 +242,6 @@ public class GameLogic {
                                             getKingPieceClicked().setVisibility(View.INVISIBLE);
                                             spacesAvailableList.remove((Integer) v.getTag());
                                             spacesAvailableList.add((Integer) getKingPieceClicked().getTag());
-//                                            buttonKingWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                             gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).setVisibility(View.VISIBLE);
                                             presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, (Integer) getKingPieceClicked().getTag());
                                             setHasKingPieceBeenClicked(false);
@@ -254,16 +253,16 @@ public class GameLogic {
                                             getKingPieceClicked().setVisibility(View.INVISIBLE);
                                             spacesAvailableList.remove((Integer) v.getTag());
                                             spacesAvailableList.add((Integer) getKingPieceClicked().getTag());
-//                                            buttonKingWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                             gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).setVisibility(View.VISIBLE);
                                             presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, (Integer) getKingPieceClicked().getTag());
                                             setHasKingPieceBeenClicked(false);
                                         }
                                     } else if (spaceClickedKingNegFort) {
-                                        if (spaceFilled || spaceFilledByOwn) {
+                                        boolean visibleFort = gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_man_2).getVisibility() == View.VISIBLE;
+                                        boolean ownKingVisibleFort = gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_king_2).getVisibility() == View.VISIBLE;
+                                        if (spaceFilled || spaceFilledByOwn || ownKingVisibleFort || visibleFort) {
 
                                         } else {
-//                                            buttonKingWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                             gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).setVisibility(View.VISIBLE);
                                             gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_man_1).setVisibility(View.INVISIBLE);
                                             gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_king_1).setVisibility(View.INVISIBLE);
@@ -275,10 +274,11 @@ public class GameLogic {
                                             setHasKingPieceBeenClicked(false);
                                         }
                                     } else if (spaceClickedKingNegEght) {
-                                        if (spaceFilled || spaceFilledByOwn) {
+                                        boolean visibleEght = gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_man_2).getVisibility() == View.VISIBLE;
+                                        boolean ownKingVisibleEght = gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_king_2).getVisibility() == View.VISIBLE;
+                                        if (spaceFilled || spaceFilledByOwn || ownKingVisibleEght || visibleEght) {
 
                                         } else {
-//                                            buttonKingWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                             gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).setVisibility(View.VISIBLE);
                                             gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_man_1).setVisibility(View.INVISIBLE);
                                             gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_king_1).setVisibility(View.INVISIBLE);
@@ -290,10 +290,11 @@ public class GameLogic {
                                             setHasKingPieceBeenClicked(false);
                                         }
                                     } else if (spaceClickedKingPlusFort) {
-                                        if (spaceFilled || spaceFilledByOwn) {
+                                        boolean ownKingVisibleNegFort = gridView.getChildAt((int) v.getTag() - 7).findViewById(R.id.checker_board_king_2).getVisibility() == View.VISIBLE;
+                                        boolean visibleNegFort = gridView.getChildAt((int) v.getTag() - 7).findViewById(R.id.checker_board_man_2).getVisibility() == View.VISIBLE;
+                                        if (spaceFilled || spaceFilledByOwn || ownKingVisibleNegFort || visibleNegFort) {
 
                                         } else {
-//                                            buttonKingWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                             gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).setVisibility(View.VISIBLE);
                                             gridView.getChildAt((Integer) v.getTag() - 7).findViewById(R.id.checker_board_man_1).setVisibility(View.INVISIBLE);
                                             gridView.getChildAt((Integer) v.getTag() - 7).findViewById(R.id.checker_board_king_1).setVisibility(View.INVISIBLE);
@@ -305,10 +306,11 @@ public class GameLogic {
                                             setHasKingPieceBeenClicked(false);
                                         }
                                     } else if (spaceClickedKingPlusEght) {
-                                        if (spaceFilled || spaceFilledByOwn) {
+                                        boolean visibleNegEght = gridView.getChildAt((int) v.getTag() - 9).findViewById(R.id.checker_board_man_2).getVisibility() == View.VISIBLE;
+                                        boolean ownKingVisibleNegEght = gridView.getChildAt((int) v.getTag() - 9).findViewById(R.id.checker_board_king_2).getVisibility() == View.VISIBLE;
+                                        if (spaceFilled || spaceFilledByOwn || ownKingVisibleNegEght || visibleNegEght) {
 
                                         } else {
-//                                            buttonKingWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                             gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).setVisibility(View.VISIBLE);
                                             gridView.getChildAt((Integer) v.getTag() - 9).findViewById(R.id.checker_board_man_1).setVisibility(View.INVISIBLE);
                                             gridView.getChildAt((Integer) v.getTag() - 9).findViewById(R.id.checker_board_king_1).setVisibility(View.INVISIBLE);
@@ -347,15 +349,13 @@ public class GameLogic {
                                             spacesAvailableList.add((Integer) v.getTag() + 9);
                                             spacesAvailableList.add((Integer) v.getTag() - 9);
                                         }
-//                                        buttonKingWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                         gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).setVisibility(View.VISIBLE);
                                         presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, (Integer) getKingPieceClicked().getTag());
                                         setHasKingPieceBeenClicked(false);
                                     }
                                 }
-                            }
+                            } else if (isHasPieceBeenClicked()) {
 
-                            else if (isHasPieceBeenClicked()) {
                                 if (spacesAvailableList.contains((Integer) v.getTag()) || spacesAvailableList.contains(reflectPosition((Integer) v.getTag()))) {
                                     if (spaceClickedNegSev) {
                                         if (spaceFilled || spaceFilledByOwn) {
@@ -368,10 +368,12 @@ public class GameLogic {
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, (Integer) getPieceClicked().getTag());
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             } else {
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_man_2).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, (Integer) getPieceClicked().getTag());
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             }
                                         }
                                     } else if (spaceClickedNegNine) {
@@ -382,59 +384,63 @@ public class GameLogic {
                                             spacesAvailableList.remove((Integer) v.getTag());
                                             spacesAvailableList.add((Integer) getPieceClicked().getTag());
                                             if ((Integer) v.getTag() == 1 || (Integer) v.getTag() == 3 || (Integer) v.getTag() == 5 || (Integer) v.getTag() == 7) {
-//                                                buttonKingWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, (Integer) getPieceClicked().getTag());
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             } else {
-//                                                buttonPieceWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_man_2).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, (Integer) getPieceClicked().getTag());
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             }
                                         }
                                     } else if (spaceClickedNegFort) {
-                                        if (spaceFilled || spaceFilledByOwn || notVisibleFort || kingVisibleFort) {
+                                        boolean kingVisibleFort = gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_king_1).getVisibility() == View.VISIBLE;
+                                        boolean ownKingVisibleFort = gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_king_2).getVisibility() == View.VISIBLE;
+                                        boolean visibleFort = gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_man_2).getVisibility() == View.VISIBLE;
+                                        if (spaceFilled || spaceFilledByOwn || kingVisibleFort || ownKingVisibleFort || visibleFort) {
 
-                                        }
-                                        if (visibleFort) {
+                                        } else {
                                             gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_man_1).setVisibility(View.INVISIBLE);
                                             getPieceClicked().setVisibility(View.INVISIBLE);
                                             spacesAvailableList.remove((Integer) v.getTag());
                                             spacesAvailableList.add((Integer) v.getTag() + 7);
                                             spacesAvailableList.add((Integer) getPieceClicked().getTag());
                                             if ((Integer) v.getTag() == 1 || (Integer) v.getTag() == 3 || (Integer) v.getTag() == 5 || (Integer) v.getTag() == 7) {
-//                                                buttonKingWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), (Integer) v.getTag() + 7, (Integer) getPieceClicked().getTag());
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             } else {
-//                                                buttonPieceYellow.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_man_2).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), (Integer) v.getTag() + 7, (Integer) getPieceClicked().getTag());
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             }
                                         }
                                     } else if (spaceClickedNegEght) {
-                                        if (spaceFilled || spaceFilledByOwn || notVisibleEght || kingVisibleEght) {
+                                        boolean kingVisibleEght = gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_king_1).getVisibility() == View.VISIBLE;
+                                        boolean ownKingVisibleEght = gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_king_2).getVisibility() == View.VISIBLE;
+                                        boolean visibleEght = gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_man_2).getVisibility() == View.VISIBLE;
+                                        if (spaceFilled || spaceFilledByOwn || kingVisibleEght || ownKingVisibleEght || visibleEght) {
 
-                                        }
-                                        if (visibleEght) {
+                                        } else {
                                             gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_man_1).setVisibility(View.INVISIBLE);
                                             getPieceClicked().setVisibility(View.INVISIBLE);
                                             spacesAvailableList.remove((Integer) v.getTag());
                                             spacesAvailableList.add((Integer) v.getTag() + 9);
                                             spacesAvailableList.add((Integer) getPieceClicked().getTag());
                                             if ((Integer) v.getTag() == 1 || (Integer) v.getTag() == 3 || (Integer) v.getTag() == 5 || (Integer) v.getTag() == 7) {
-//                                                buttonKingWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), (Integer) v.getTag() + 9, (Integer) getPieceClicked().getTag());
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             } else {
-//                                                buttonPieceWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_man_2).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), (Integer) v.getTag() + 9, (Integer) getPieceClicked().getTag());
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             }
                                         }
                                     }
@@ -447,15 +453,15 @@ public class GameLogic {
                                             spacesAvailableList.remove((Integer) v.getTag());
                                             spacesAvailableList.add((Integer) getPieceClicked().getTag());
                                             if ((Integer) v.getTag() == 1 || (Integer) v.getTag() == 3 || (Integer) v.getTag() == 5 || (Integer) v.getTag() == 7) {
-//                                                buttonKingWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, ((Integer) getPieceClicked().getTag()));
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             } else {
-//                                                buttonPieceWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_man_2).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, ((Integer) getPieceClicked().getTag()));
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             }
                                         }
                                     } else if (spaceClickedNegNine) {
@@ -466,15 +472,15 @@ public class GameLogic {
                                             spacesAvailableList.remove((Integer) v.getTag());
                                             spacesAvailableList.add((Integer) getPieceClicked().getTag());
                                             if ((Integer) v.getTag() == 1 || (Integer) v.getTag() == 3 || (Integer) v.getTag() == 5 || (Integer) v.getTag() == 7) {
-//                                                buttonKingWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, ((Integer) getPieceClicked().getTag()));
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             } else {
-//                                                buttonPieceWhite.findViewWithTag(v.getTag()).setVisibility(View.VISIBLE);
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_man_2).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, ((Integer) getPieceClicked().getTag()));
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             }
                                         }
                                     }
@@ -482,26 +488,34 @@ public class GameLogic {
                             }
                         }
                     }
+
                 }
             });
-        }
-        else {
+        } else {
             buttonPieceYellow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setHasPieceBeenClicked(true);
-                    setSpacesAvailable(true);
-                    setPieceClicked((Integer) v.getTag(), v);
-                    setReflectedPieceClicked(reflectPosition((Integer) v.getTag()));
+                    if (isHasKingPieceBeenClicked()) {
+                        setHasKingPieceBeenClicked(false);
+                    } else {
+                        setHasPieceBeenClicked(true);
+                        setSpacesAvailable(true);
+                        setPieceClicked((Integer) v.getTag(), v);
+                        setReflectedPieceClicked(reflectPosition((Integer) v.getTag()));
+                    }
                 }
             });
             buttonKingYellow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setHasKingPieceBeenClicked(true);
-                    setSpacesAvailable(true);
-                    setKingPieceClicked((Integer) v.getTag(), v);
-                    setReflectedKingPieceClicked(reflectPosition((Integer) v.getTag()));
+                    if (isHasPieceBeenClicked()) {
+                        setHasPieceBeenClicked(false);
+                    } else {
+                        setHasKingPieceBeenClicked(true);
+                        setSpacesAvailable(true);
+                        setKingPieceClicked((Integer) v.getTag(), v);
+                        setReflectedKingPieceClicked(reflectPosition((Integer) v.getTag()));
+                    }
                 }
             });
             imageView.setOnClickListener(new View.OnClickListener() {
@@ -525,14 +539,8 @@ public class GameLogic {
                             boolean spaceClickedKingPlusEght = (Integer) v.getTag() == (Integer) getKingPieceClicked().getTag() + 18;
                             boolean spaceEdge = (Integer) v.getTag() == 1 || (Integer) v.getTag() == 3 || (Integer) v.getTag() == 5 || (Integer) v.getTag() == 7;
                             boolean spaceEdgeReflect = Objects.equals((Integer) v.getTag(), reflectPosition((int) 1)) || Objects.equals((Integer) v.getTag(), reflectPosition((int) 3)) || Objects.equals((Integer) v.getTag(), reflectPosition((int) 5)) || Objects.equals((Integer) v.getTag(), reflectPosition((int) 7));
-                            boolean spaceFilled = gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_man_2).getVisibility() == View.VISIBLE || gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_1).getVisibility() == View.VISIBLE;
-                            boolean spaceFilledByOwn = gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_man_1).getVisibility() == View.VISIBLE || gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).getVisibility() == View.VISIBLE;
-                            boolean notVisibleFort = gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_man_2).getVisibility() == View.INVISIBLE || gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_king_2).getVisibility() == View.INVISIBLE;
-                            boolean notVisibleEght = gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_man_2).getVisibility() == View.INVISIBLE || gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_king_2).getVisibility() == View.INVISIBLE;
-                            boolean visibleFort = gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_man_2).getVisibility() == View.VISIBLE || gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_king_2).getVisibility() == View.VISIBLE;
-                            boolean visibleEght = gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_man_2).getVisibility() == View.VISIBLE || gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_king_2).getVisibility() == View.VISIBLE;
-                            boolean kingVisibleFort = gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_king_2).getVisibility() == View.VISIBLE;
-                            boolean kingVisibleEght = gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_king_2).getVisibility() == View.VISIBLE;
+                            boolean spaceFilled = gridView.getChildAt((int) v.getTag()).findViewById(R.id.checker_board_man_2).getVisibility() == View.VISIBLE || gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_2).getVisibility() == View.VISIBLE;
+                            boolean spaceFilledByOwn = gridView.getChildAt((int) v.getTag()).findViewById(R.id.checker_board_man_1).getVisibility() == View.VISIBLE || gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_1).getVisibility() == View.VISIBLE;
                             if (isHasKingPieceBeenClicked()) {
                                 if (spacesAvailableList.contains((Integer) v.getTag()) || spacesAvailableList.contains(reflectPosition((Integer) v.getTag()))) {
                                     if (spaceClickedKingPlusSev) {
@@ -580,7 +588,9 @@ public class GameLogic {
                                             setHasKingPieceBeenClicked(false);
                                         }
                                     } else if (spaceClickedKingNegFort) {
-                                        if (spaceFilled || spaceFilledByOwn) {
+                                        boolean visibleFort = gridView.getChildAt((int) v.getTag() + 7).findViewById(R.id.checker_board_man_1).getVisibility() == View.VISIBLE;
+                                        boolean ownKingVisibleFort = gridView.getChildAt((int) v.getTag() + 7).findViewById(R.id.checker_board_king_1).getVisibility() == View.VISIBLE;
+                                        if (spaceFilled || spaceFilledByOwn || ownKingVisibleFort || visibleFort) {
 
                                         } else {
                                             getKingPieceClicked().setVisibility(View.INVISIBLE);
@@ -600,7 +610,9 @@ public class GameLogic {
                                             }
                                         }
                                     } else if (spaceClickedKingNegEght) {
-                                        if (spaceFilled || spaceFilledByOwn) {
+                                        boolean visibleEght = gridView.getChildAt((int) v.getTag() + 9).findViewById(R.id.checker_board_man_1).getVisibility() == View.VISIBLE;
+                                        boolean ownKingVisibleEght = gridView.getChildAt((int) v.getTag() + 9).findViewById(R.id.checker_board_king_1).getVisibility() == View.VISIBLE;
+                                        if (spaceFilled || spaceFilledByOwn || ownKingVisibleEght || visibleEght) {
 
                                         } else {
                                             gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_man_2).setVisibility(View.INVISIBLE);
@@ -620,7 +632,9 @@ public class GameLogic {
                                             }
                                         }
                                     } else if (spaceClickedKingPlusFort) {
-                                        if (spaceFilled || spaceFilledByOwn) {
+                                        boolean visibleNegFort = gridView.getChildAt((int) v.getTag() - 7).findViewById(R.id.checker_board_man_1).getVisibility() == View.VISIBLE;
+                                        boolean ownKingVisibleNegFort = gridView.getChildAt((int) v.getTag() - 7).findViewById(R.id.checker_board_king_1).getVisibility() == View.VISIBLE;
+                                        if (spaceFilled || spaceFilledByOwn || ownKingVisibleNegFort || visibleNegFort) {
 
                                         } else {
                                             gridView.getChildAt((Integer) v.getTag() - 7).findViewById(R.id.checker_board_man_2).setVisibility(View.INVISIBLE);
@@ -640,7 +654,9 @@ public class GameLogic {
                                             }
                                         }
                                     } else if (spaceClickedKingPlusEght) {
-                                        if (spaceFilled || spaceFilledByOwn) {
+                                        boolean visibleNegEght = gridView.getChildAt((int) v.getTag() - 9).findViewById(R.id.checker_board_man_1).getVisibility() == View.VISIBLE;
+                                        boolean ownKingVisibleNegEght = gridView.getChildAt((int) v.getTag() - 9).findViewById(R.id.checker_board_king_1).getVisibility() == View.VISIBLE;
+                                        if (spaceFilled || spaceFilledByOwn || ownKingVisibleNegEght || visibleNegEght) {
 
                                         } else {
                                             gridView.getChildAt((Integer) v.getTag() - 9).findViewById(R.id.checker_board_man_2).setVisibility(View.INVISIBLE);
@@ -692,8 +708,7 @@ public class GameLogic {
                                         setHasKingPieceBeenClicked(false);
                                     }
                                 }
-                            }
-                            else if (isHasPieceBeenClicked()) {
+                            } else if (isHasPieceBeenClicked()) {
                                 if (spacesAvailableList.contains((Integer) v.getTag()) || spacesAvailableList.contains(reflectPosition((Integer) v.getTag()))) {
                                     if (spaceClickedNegSev) {
                                         if (spaceFilled || spaceFilledByOwn) {
@@ -706,10 +721,12 @@ public class GameLogic {
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_1).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, (Integer) getPieceClicked().getTag());
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             } else {
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_man_1).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, (Integer) getPieceClicked().getTag());
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             }
                                         }
                                     } else if (spaceClickedNegNine) {
@@ -724,17 +741,21 @@ public class GameLogic {
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_1).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, (Integer) getPieceClicked().getTag());
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             } else {
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_man_1).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, (Integer) getPieceClicked().getTag());
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             }
                                         }
                                     } else if (spaceClickedNegFort) {
-                                        if (spaceFilled || spaceFilledByOwn || notVisibleFort || kingVisibleFort) {
+                                        boolean ownKingVisibleFort = gridView.getChildAt((int) v.getTag() + 7).findViewById(R.id.checker_board_king_1).getVisibility() == View.VISIBLE;
+                                        boolean visibleFort = gridView.getChildAt((int) v.getTag() + 7).findViewById(R.id.checker_board_man_1).getVisibility() == View.VISIBLE;
+                                        boolean kingVisibleFort = gridView.getChildAt((int) v.getTag() + 7).findViewById(R.id.checker_board_king_2).getVisibility() == View.VISIBLE;
+                                        if (spaceFilled || spaceFilledByOwn || kingVisibleFort || ownKingVisibleFort || visibleFort) {
 
-                                        }
-                                        if (visibleFort) {
+                                        } else {
                                             gridView.getChildAt((Integer) v.getTag() + 7).findViewById(R.id.checker_board_man_2).setVisibility(View.INVISIBLE);
                                             getPieceClicked().setVisibility(View.INVISIBLE);
                                             spacesAvailableList.remove((Integer) v.getTag());
@@ -744,18 +765,21 @@ public class GameLogic {
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_1).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), (Integer) v.getTag() + 7, (Integer) getPieceClicked().getTag());
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             } else {
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_man_1).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), (Integer) v.getTag() + 7, (Integer) getPieceClicked().getTag());
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             }
-
                                         }
                                     } else if (spaceClickedNegEght) {
-                                        if (spaceFilled || spaceFilledByOwn || notVisibleEght || kingVisibleEght) {
+                                        boolean kingVisibleEght = gridView.getChildAt((int) v.getTag() + 9).findViewById(R.id.checker_board_king_2).getVisibility() == View.VISIBLE;
+                                        boolean visibleEght = gridView.getChildAt((int) v.getTag() + 9).findViewById(R.id.checker_board_man_1).getVisibility() == View.VISIBLE;
+                                        boolean ownKingVisibleEght = gridView.getChildAt((int) v.getTag() + 9).findViewById(R.id.checker_board_king_1).getVisibility() == View.VISIBLE;
+                                        if (spaceFilled || spaceFilledByOwn || kingVisibleEght || ownKingVisibleEght || visibleEght) {
 
-                                        }
-                                        if (visibleEght) {
+                                        } else {
                                             gridView.getChildAt((Integer) v.getTag() + 9).findViewById(R.id.checker_board_man_2).setVisibility(View.INVISIBLE);
                                             getPieceClicked().setVisibility(View.INVISIBLE);
                                             spacesAvailableList.remove((Integer) v.getTag());
@@ -765,17 +789,18 @@ public class GameLogic {
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_1).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), (Integer) v.getTag() + 9, (Integer) getPieceClicked().getTag());
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             } else {
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_man_1).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), (Integer) v.getTag() + 9, (Integer) getPieceClicked().getTag());
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             }
                                         }
                                     }
                                 } else {
                                     if (spaceClickedNegSev) {
                                         if (spaceFilled || spaceFilledByOwn) {
-
 
                                         } else {
                                             getPieceClicked().setVisibility(View.INVISIBLE);
@@ -785,10 +810,12 @@ public class GameLogic {
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_1).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, ((Integer) getPieceClicked().getTag()));
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             } else {
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_man_1).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, ((Integer) getPieceClicked().getTag()));
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             }
                                         }
                                     } else if (spaceClickedNegNine) {
@@ -802,10 +829,12 @@ public class GameLogic {
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_king_1).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, ((Integer) getPieceClicked().getTag()));
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             } else {
                                                 gridView.getChildAt((Integer) v.getTag()).findViewById(R.id.checker_board_man_1).setVisibility(View.VISIBLE);
                                                 presenter.getPlayerMove((Integer) v.getTag(), reflectPosition((Integer) v.getTag()), 0, ((Integer) getPieceClicked().getTag()));
                                                 setHasPieceBeenClicked(false);
+                                                setHasKingPieceBeenClicked(false);
                                             }
                                         }
                                     }

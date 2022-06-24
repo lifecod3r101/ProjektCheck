@@ -64,7 +64,7 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuPrese
         waitingRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainMenuActivity.this, OwnSessionActivity.class).putExtra("sessionId", getSessionId()));
+                startActivity(new Intent(MainMenuActivity.this, OwnSessionActivity.class).putExtra("sessionId", mainMenuPresenter.getCurrSessId()));
             }
         });
         profileImg.setOnClickListener(new View.OnClickListener() {

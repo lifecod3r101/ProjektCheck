@@ -72,7 +72,7 @@ public class GameSessionRequestPresenter implements CheckerInterfaceHolder.GameS
 
     @Override
     public void listenForUpdate(String hostPlayerId, String joiningPlayerId, String gameSessionId) {
-        Query gameSessionQuery = constants.getFirebaseFirestore().collection("Player").document(hostPlayerId).collection("GameSession").whereEqualTo("gameSessionPlayers.Player2", Constants.getFirebaseAuth().getCurrentUser().getUid());
+        Query gameSessionQuery = constants.getFirebaseFirestore().collection("Player").document(hostPlayerId).collection("GameSession").whereEqualTo("currSessionId", gameSessionId);
         registration = gameSessionQuery.addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -93,7 +93,6 @@ public class GameSessionRequestPresenter implements CheckerInterfaceHolder.GameS
                             break;
                     }
                 }
-
             }
         });
     }
