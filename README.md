@@ -6,4 +6,4 @@ The technologies used were as follows:
  		i. This stored player information as well as in-game session moves
 		ii. Database Transactions were utilised to ensure moves are correct.
  	b. UI-Android Recyclerview(Grid version)
-To download it, here is the link to the APK: https://drive.google.com/file/d/15I2n74iF_fIOSxN47l5b9EacyZTmcLVW/view?usp=drive_link
+To download it, here is the link to the APK: https://drive.google.com/file/d/1-hWvbYd8XOT2migYRpn76GC7Nhv6BHf-/view?usp=drive_link 
